@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<title> Basi di Git </title>
+<link rel="stylesheet" href="CSS/git.css" type="text/css"/>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+
+<div class="uelleCapitoli" >
+	<ul class="capitoliGit">
+		<li><a href="Master.html">Master Git Tutorial</a> </li>
+		<li><a href="git1.html">cap.1 - In generale</a></li>
+		<li><a href="git3.html">cap.3 - Diramazioni </a></li>
+		<li><a href="git4.html">cap.4 -  </a></li>
+		<li><a href="git5.html">cap.5 - </a></li>
+		<li><a href="git6.html">cap.6 - </a> </li>
+		<li><a href="git7.html">cap.7 - </a> </li>
+	</ul>
+</div>
+
+
+<article>
+	<div class="numCapitolo"> <span class="spanNC">cap. 2</span></div> 
+
+					<h1>Basi di Git</h1>
+
+<section class="listaArgomenti">
+	Argomenti
+	<select name="sezioni" class="sezioni">
+	  <optgroup label="Repository">
+			<option value="s1">Creare un repository in una directory preesistente</option>
+			<option value="s2">Clonare un Repository Esistente</option>
+	  </optgroup>
+	  <optgroup label="Salvare modifiche nei repo">
+			<option value="s3">Controllare lo stato dei file (del progetto)</option>
+			<option value="s4">Tracciare nuovi file</option>
+			<option value="s5">Fare lo stage dei file modificati</option>
+			<option value="s6">Ignorare file</option>
+			<option value="s7">Visualizzare le modifiche</option>
+			<option value="s8">Commitare le modifiche</option>
+			<option value="s9">Saltare l'area di stage</option>
+			<option value="s10">Rimuovere i file</option>
+			<option value="s11">Spostare i file</option>
+	  </optgroup>
+	  <optgroup label="Cronologia commit">
+			<option value="s12">Vedere la cronologia delle commit</option>
+			<option value="s13">Limitare l'output delo log</option>
+			<option value="s14">Filtrare i risultati in base a data e ora</option>
+			<option value="s15">Recuperare una sola commit con 'show'</option>
+			<option value="s16">Usare una GUI per visualizzare la cronologia</option>
+	  </optgroup>
+	  <optgroup label="Annullare qualcosa">
+			<option value="s17">Modificare l'ultima commit</option>
+			<option value="s18">Rimuovere un file dall'area di stage</option>
+			<option value="s19">Annullare le modifiche a un file</option>
+	  </optgroup>
+	  <optgroup label="Server remote">
+			<option value="s20">Vedere i propri server remoti</option>
+			<option value="s21">Aggiungere un repository remoto</option>
+			<option value="s22">Aggiungere un repository locale in remoto a GitHub</option>
+			<option value="s23">Scaricare e condividere coi server remoti</option>
+			<option value="s24">Condividere coi server remoti</option>
+			<option value="s25">Controllare un server remoto</option>
+			<option value="s26">Rimuovere e rinominare server remoti</option>
+	  </optgroup>
+	  <optgroup label="Etichette">
+			<option value="s27">Etichette</option>
+			<option value="s28">Elencare l'etichette</option>
+			<option value="s29">Vedere la commit associata al tag ('show')</option>
+			<option value="s30">Etichette firmate</option>
+			<option value="s31">Etichettare in un secondo momento</option>
+			<option value="s32">Condividere le etichette</option>
+	  </optgroup>
+	</select>
+
+</section>
+
+
+<section id="s1">
+	<h2>Creare un repository in una directory preesistente</h2>
+	<p>Se si vuole iniziare a tenere traccia con Git di un progetto esistente, bisogna andare nella directory del progetto e digitare:</p>
+	<pre>git init</pre>
+	
+	<p>Questo creerà una nuova sottodirectory chiamata <b>.git</b> che conterrà tutti i file necessari per il repository, una struttura del repository Git. A questo punto non è ancora stato tracciato niente del progetto.
+Pertanto si può iniziare a tracciare i file esistenti col comando <span class="comando">git add &lt;opzioni&gt;</span> e fare una prima commit
+	</p>
+
+	<pre>git add	leggiMi			<span class="nota">(viene aggiunto il file 'leggiMi')</span>	</pre>
+	<pre>git add *.txt			<span class="nota">(vengono aggiunti tutti i file .txt)</span></pre>
+	<pre>git add *.html			<span class="nota">(vengono aggiunti tutti i file .html)</span>
+ecc..</pre>
+
+	<p>e quindi si fa una prima commit</p>
+	<pre>git commit -m 'Versione iniziale del progetto'</pre>
+</section>
+
+<section id="s2">
+	<h2>Clonare un Repository Esistente</h2>
+	<p>Per clonare un repository esistente in remoto bisogna innanzitutto spostarsi nella directoty (dove si vuole copiare il repository) e utilizzare il comando <span class="comando">clone</span> seguito dall'url della repo 
+	</p>
+	<pre>git clone &lt;url del repository in GitHub&gt;</pre>
+	<p>esempio di clonazione della repo KaiPai su GitHub</p>
+	<pre>git clone https://github.com/MikePap/KaiPai.git	</pre>
+	<p>Si può anche cambiare il nome aggiungendolo alla fine della dichiarazione</p>
+	<pre>git clone https://github.com/MikePap/KaiPai.git kaipai2</pre>
+</section>
+
+<section id="s3">
+	<h2>Controllare lo stato dei file (del progetto)</h2>
+	<pre>git status</pre>
+	<p>Se il messaggio è il seguente:
+		<span class="output">
+On branch master nothing to commit, working directory clean
+		</span>  	
+significa la directory di lavoro è pulita, ovvero che nessuno dei file tracciati è stato modificato. Inoltre Git non ha trovato nessun file non ancora tracciato, altrimenti sarebbero elencati qui. In aggiunta il comando indica anche in quale ramo sei. Per ora, è sempre master, che è il predefinito
+	</p>	
+	<p>Proviamo ad aggiungere un file <q>readMe</q> (con l'editor 'vim') ed a ridare il comando <span class="comando">status</span></p>
+	<pre>vim ReadMe
+git status
+</pre>
+	<p>Ora Git vede il file <q>readMe</q> come <span class="nota">untracked</span> (non tracciato), significa che Git vede un file che non c'era nello snapshot precedente; Git non lo includerà negli snapshot delle nostre commit fino a quando non glielo si dice esplicitamente
+	</p>	
+</section>
+
+<section id="s4">
+	<h2>Tracciare nuovi file</h2>
+	<p>Quando si traccia un file lo si porta dallo stato di <span class="nota">untracked</span> a diventare <span class="nota">tracked</span>.
+Per tracciare dei nuovi file si usa il comando <span class="comando">git add</span>; per cui per tracciare il file precedentemente creato <q>readMe</q>:
+	</p>
+	<pre>git add readMe</pre>
+	<p>Ora se controlliamo di nuovo lo status Git ci dirà che il file (aggiunto precedentemente) è stato tracciato con la sigla: <span class="nota">Changes to be committed</span>; ora si trova nella <span class="nota">area di stage</span> ed è pronto per essere <span class="nota">committato</span>
+	</p>
+</section>
+
+<section id="s5">
+	<h2>Fare lo stage dei file modificati</h2>
+	<p>Se proviamo a modificare un file e ridiamo il comando <span class="comando">status</span> noteremo che il file modificato  appare nella sezione chiamata <span class="nota">Changes not staged for commit</span>; significa che il file tracciato è stato modificato nella directory di lavoro ma non è ancora nello stage; per farlo dobbiamo riusare il comando <span class="comando">add</span>:
+	</p>
+	<pre>git add fileModificato</pre>
+</section>
+
+<section id="s6">
+	<h2>Ignorare file</h2>
+	<p>Nel caso dell'editor <span class="nota">gedit</span> (ma anche altri) succede che produca dei file automaticamente (fa una copia, dopo un certo tempo, di quelli aperti) con un ~ finale. In questo caso se si vuole che questi file non vengano aggiunti da Git allora bisogna creare un file chiamato <span class="nota">.gitignore</span> e inserire al suo interno delle regole che Git osserverà. <br />
+Per esempio se si vuole che Git non aggiunga i file che finiscono con <span class="nota">.o</span> oppure in <span class="nota">.a</span> bisogna inserire la seguente riga:
+</p>
+	<pre>*.[oa]</pre>
+	<p>Se si vuole che non siano aggiunti i file che terminano con <span class="nota">~</span> (caso gedit), allora:</p>
+	<pre>*~</pre>
+	<p>Altri esempi</p>
+	<pre>
+# un commento 		<span class="nota">questo è ignorato</span>				
+*.a			<span class="nota">escludere i file .a</span>
+!lib.a			<span class="nota">ma traccia lib.a, sebbene su tu stia ignorando tutti i file '.a'</span>
+/TODO			<span class="nota">ignora solo il TODO nella root, e non subdir/TODO</span>
+build/			<span class="nota">ignora tutti i file nella directory build/</span>
+doc/*.txt		<span class="nota">ignora doc/note.txt, ma non doc/server/arch.txt</span>
+doc/**/*.txt		<span class="nota">ignora tutti i file .txt nella directory doc/</span>
+</pre>
+</section>
+
+<section id="s7">
+	<h2>Visualizzare le modifiche</h2>
+	<p>Il comando <span class="comando">git status</span> mostra solo i file modificati mentre se si vuole sapere anche quali modifiche sono state apportate al file si può usare </p>
+	<pre>git diff</pre>
+	<p>Questo comando confronta cosa c'è nella tua directory di lavoro con quello che c'è nella tua area di stage. Il risultato mostra le modifiche effettuate che ancora non sono state messe nello stage. Se tutte le modifiche sono state messe nello stage, <span class="comando">git diff</span> non mostrereà nulla.
+	</p>
+	<p>Se vuoi vedere cosa c'è nello stage e che farà parte della prossima commit:</p>
+	<pre>
+git diff --cached
+git diff --staged		<span class="nota">(uguale al precedente da Git 1.6.1 in poi)</span>
+</pre>
+</section>
+
+<section id="s8">
+	<h2>Commitare le modifiche</h2>
+	<p>Quando l'area di stage è configurata e tutti i file creati e modificati sono stati aggiunti con <span class="comando">git add</span> si possono <span class="nota">commitare le modifiche</span>:
+	</p>
+	<pre>git commit </pre>
+	<p>Dopo aver dato il comando si aprirà il file <q>COMMIT_EDITMSG</q> con l'editor predefinito che visualizzerà il file creati e modificati. <br />
+Se si aggiunge il parametro <span class="comando">-v</span> saranno inserite anche le modofiche stesse. <br />
+<span class="output">'### NB':	Dopo aver modificati il file 'COMMIT_EDITMSG', inserendo il messaggio, non mi viene validata la commit ??? 
+Mi da il seguente messaggio: 'Interruzione del commit a causa di un messaggio di commit vuoto.'
+Forse dipende dall'editor 'gedit' che si apre separatamente dal terminale e non mette in pausa il comando. Forse il programma predefinito 'Vim' si apre interrompendo il comando del terminale
+</span>
+	</p>
+	<p>In alternativa, si puo inserire il messaggio per la commit alla riga di comando della commit specificando l'opzione <span class="comando">-m</span>, come segue:</p>
+	<pre>git commit -m "Storia 182: Corretti benchmarks per la velocità"</pre>
+	<p><span class="output">invece con l'opzione '-m' la commit mi viene convalidata</span></p>
+
+	<p>In definitiva la commit registra lo snapshot che hai salvato nell'area di stage. Qualsiasi cosa che non è nello stage rimarrà lì come non modificata; </p>
+
+</section>
+
+<section id="s9">
+	<h2>Saltare l'area di stage</h2>
+	<p>Sebbene sia estremamente utile per amministrare le commit, l'area di stage è molto più complessa di quanto si possa averne bisogno nel lavoro normale. Se si vuol saltare l'area di stage, Git fornisce una semplice accorciatoia. Con l'opzione <span class="comando">-a</span> al comando <span class="comando">git commit</span>, Git, committando, mette automaticamente nello stage tutti i file che erano già tracciati, permettendo di saltare la parte <span class="comando">git add</span>:
+	</p>
+	<pre>git commit -a -m 'added new benchmarks'</pre>
+	<p>Nota come in questo caso non si ha bisogno di eseguire <span class="comando">git add</span> per <q>benchmarks.rb</q> prima della commit.</p>
+</section>
+
+<section id="s10">
+	<h2>Rimuovere i file</h2>
+	<p>Per rimuovere un file da Git bisogna rimuoverlo dai file tracciati (rimuoverlo dall'area di stage) con il comando <span class="comando">git rm</span> ma ATTENZIONE: <br />
+1) Se il file non è stato tracciato (<span class="nota">untracked</span>) se diamo:
+	</p>
+	<pre>git rm fileNonTracciato</pre>
+	<p>non succede nulla e per eliminarlo bisogna, invece, usare solo <span class="comando">rm</span></p>
+	<pre>rm fileNonTracciato</pre>
+	<p>ora il file viene eliminato completamente</p>
+	
+	<p>2) Se il file è stato tracciato ed è nello stage, per eliminarlo completamente, dobbiamo prima eliminarlo dall'area di lavoro con: 
+	</p>
+	<pre>rm fileTracciato</pre>
+	<p>e poi dall'area di stage con:</p>
+	<pre>git rm filerTracciato</pre>
+
+	<p>3) Se il file è stato committato dopo averlo eliminato con <span class="comando">git rm &lt;...&gt;</span>:</p>
+	<pre>git rm fileCommittato</pre>
+	<p>sparirà dall'area di lavoro ma rimarrà nella commit; infatti se si da <span class="comando">git status</span> Git ci dirà che bisogna committare (<span class="nota">Changes to be committed</span>) e pertanto bisogna fare una commit finale per eliminarlo del tutto
+	</p>
+	<pre>git commit -m 'Il file ora è stato eliminato definitivamente'</pre>
+	<p>a questo punto se si da <span class="comando">git status</span> non risulterà più niente da committare.</p>
+
+	<p class="nota"> Un'altra cosa utile che si potrebbe voler fare è quello di mantenere il file nel proprio ambiente di lavoro ma rimuoverlo dall'area di stage. In altre parole, lo si vuole mantenere sul disco ma non si vuole che Git continui a tracciarlo. Questo è particolarmente utile quando si dimentica di aggiungere qualcosa al file <q>.gitignore</q> e accidentalmente lo si mette in stage, come un file di log molto grande o un gruppo di file compilati .a. <br />
+Per farlo si usa l'opzione <span class="comando">--cached</span>
+	</p>
+	<pre>git rm --cached readme.txt</pre>
+	<p>Si possono passare file, directory o pattern glob di file al comando <span class="comando">git rm</span>. Per esempio</p>
+	<pre>git rm log/\*.log</pre>
+	<p>Questo comando rimuoverà tutti i file che hanno l'estensione <span class="nota">.log</span> nella directory <span class="nota">log/.</span> (Nota la barra inversa (\) prima di *. Questo è necessario perché Git ha un'espansione propria dei nomi di file oltre a quella della tua shell). <br />
+	Altro esempio:
+	</p>
+	<pre>git rm \*~		rimuove tutti i file che finiscono con ~ </pre>
+</section>
+
+<section id="s11">
+	<h2>Spostare i file</h2>
+	<p>Git non traccia esplicitamente gli spostamenti dei file. Se si rinomina un file in Git, nessun metadato viene salvato per dirgli che lo hai rinominato. Tuttavia, Git è abbastanza intelligente da capirlo dopo che l'hai fatto
+	</p>
+	<pre>git mv readMe read</pre>
+	<p>Il file <q>readMe</q> è stato rinominato <q>read</q></p>
+</section>
+
+<section id="s12">
+	<h2>Vedere la cronologia delle commit</h2>
+	<p>
+		Quando si sono eseguite più commit allora potrebbe interessare vedere cosa è successo nel passato. Per farlo si usa il comando <span class="comando">git log</span>: 
+	</p>
+	<pre>git log </pre>
+	<p>In modo predefinito, senza argomenti, <span class="comando">git log</span> mostra le commit fatte nel repository in ordine cronologico inverso. In questo modo la commit più recente è la prima ad apparire. Questo comando elenca ogni commit con il suo codice SHA-1, il nome e l'email dell'autore, la data di salvataggio e il messaggio della commit. 
+	</p>
+	<p>
+Ma sono disponibili moltissime opzioni da passare al comando <span class="comando">git log</span>. <br />	
+Una delle opzioni più utili è <span class="comando">-p</span>, che mostra le differenze introdotte da ciascuna commit. Mentre <span class="comando">-n</span>,  limita l'output agli ultimi due elementi:
+	</p>
+	<pre>git log -p -2</pre>
+	<p>Quest'opzione mostra le stesse informazioni ma ciascun elemento è seguito dalle differenze. Questo è molto utile per revisionare il codice o per dare un'occhiata veloce a cosa è successo in una serie di commit che un collaboratore ha aggiunto.
+	</p>
+	<p> Qualche volta è più semplice verificare le singole modifiche piuttosto che intere righe. Per questo in Git è disponibile l'opzione <span class="comando">--word-diff</span>, che puoi aggiungere al comando <span class="comando">git log -p</span> per vedere le differenze tra le parole invece di quella normale, linea per linea:
+	</p>
+	<pre>git log -p --word-diff</pre>
+	<p>non ci sono righe aggiunte o rimosse in questo output, come in una normale differenza. I cambiamente sono invece mostrati sulla stessa riga.
+La parola aggiunta è racchiusa tra <span class="nota">{+ +}</span> e quella rimossa tra <span class="nota">[- -]</span>. 
+	</p>
+	<pre>git log -U1 --word-diff</pre>
+	<p>In quest'altro esempio il parametro <span class="comando">-U1</span> permette di ridurre le solite tre righe di contesto dall'output delle differenze a una sola, poiché ora il contesto è costituito da parole e non righe. 
+	</p>
+
+	<p>Per vedere alcune statistiche brevi per ciascuna commit, si può usare l'opzione <span class="comando">--stat</span>: </p>
+	<pre>git log --stat</pre>
+	<p>l'opzione <span class="comando">--stat</span> visualizza sotto ogni commit la lista dei file modificati, quanti file sono stati modificati, e quante righe in questi file sono state aggiunte e rimosse. Alla fine aggiunge anche un resoconto delle informazioni
+	</p>
+	<p>Un'altra opzione veramente utile è <span class="comando">--pretty</span> che accetta altre opzioni (<span class="nota">oneline, format, short, full, fuller</span>). Le ultime tre sono più o meno simili a <span class="comando">oneline</span>. Per esempio:
+	</p>
+	<pre>git log --pretty=oneline</pre>
+	
+	<p>L'opzione <span class="comando">oneline</span> visualizza ogni commit su una singola linea, che è utile se si controlla una lunga serie di commit.  </p>
+	<pre>git log --pretty=format:"%h - %an, %ar : %s"</pre>
+	<p>Esempio di una specie di output (comando precedente):</p>
+	<pre>
+<span class="nota">ca82a6d - Scott Chacon, 11 months ago : changed the version number
+085bb3b - Scott Chacon, 11 months ago : removed unnecessary test code
+a11bef0 - Scott Chacon, 11 months ago : first commit</span>
+</pre>
+	<p>Buono anche per vedere il numero dei commit eseguiti </p>
+
+	<p>Ecco la lista delle opzioni per <span class="comando">format</span></p>
+
+	<table class="tabella" border="0" cellspacing="1" cellpadding="3">
+		<tr>
+			<td>%H</td>
+			<td>Hash della commit</td>
+		</tr>
+		<tr>
+			<td>%h</td>
+			<td>Hash della commit abbreviato</td>
+		</tr>
+		<tr>
+			<td>%T</td>
+			<td>Hash dell'albero </td>
+		</tr>
+		<tr>
+			<td>%t</td>
+			<td>Hash dell'albero abbreviato</td>
+		</tr>
+		<tr>
+			<td>%P</td>
+			<td>Hash del genitore</td>
+		</tr>
+		<tr>
+			<td>%p</td>
+			<td>Hash del genitore abbreviato</td>
+		</tr>
+		<tr>
+			<td>%an</td>
+			<td>Nome dell'autore</td>
+		</tr>
+		<tr>
+			<td>%ae</td>
+			<td>e-mail dell'autore</td>
+		</tr>
+		<tr>
+			<td>%ad</td>
+			<td>Data di commit dell'autore (il formato rispetta l'opzione --date=)</td>
+		</tr>
+		<tr>
+			<td>%ar</td>
+			<td>Data relativa di commit dell'autore</td>
+		</tr>
+		<tr>
+			<td>%cn</td>
+			<td>Nome di chi ha fatto la commit (committer, in inglese)</td>
+		</tr>
+		<tr>
+			<td>%ce</td>
+			<td>e-mail di chi ha fatto la commit</td>
+		</tr>
+		<tr>
+			<td>%cd</td>
+			<td>Data della commit</td>
+		</tr>
+		<tr>
+			<td>%cr</td>
+			<td>Data relativa della commit</td>
+		</tr>
+		<tr>
+			<td>%s</td>
+			<td>Oggetto</td>
+		</tr>
+	</table>
+	
+	<p>C'è differenza tra autore e committer (chi ha eseguito la commit). L'autore è la persona che ha scritto la modifica, mentre il committer è l'ultima persona che ha applicato la modifica. Così, se invii una modifica a un progetto ed uno dei membri principali del progetto la applica, ne avranno entrambi il riconoscimento. <br />
+Inoltre Le opzioni <span class="comando">oneline</span> e <span class="comando">format</span> sono particolarmente utili con un'altra opzione di log chiamata <span class="comando">--graph</span>. Questa aggiunge un piccolo grafico ASCII carino che mostra le diramazioni e le unioni della cronologia.
+	</p>
+
+	<p>La seguente è una lista delle opzioni più usate con 'log' (ci sono anche quelle viste sopra)</p>
+	<table class="tabella" border="0" cellspacing="1" cellpadding="3">
+		<tr>
+			<td>-p</td>
+			<td>Mostra la modifica introdotta con ogni commit</td>
+		</tr>
+		<tr>
+			<td>--word-diff</td>
+			<td>Mostra la modifica nel formato word diff</td>
+		</tr>
+		<tr>
+			<td>--stat</td>
+			<td>Mostra le statistiche per i file modificati in ogni commit</td>
+		</tr>
+		<tr>
+			<td>--shortstat</td>
+			<td>Mostra solo le righe cambiate/aggiunte/rimosse del comando --stat</td>
+		</tr>
+		<tr>
+			<td>--name-only</td>
+			<td>Mostra l'elenco dei file modificati dopo le informazione della commit</td>
+		</tr>
+		<tr>
+			<td>--name-status</td>
+			<td>Mostra l'elenco dei file con le informazioni aggiunte/modifiche/eliminate</td>
+		</tr>
+		<tr>
+			<td>--abbrev-commit</td>
+			<td>Mostra solo i primi caratteri del codice SHA-1 invece di tutti i 40</td>
+		</tr>
+		<tr>
+			<td>--relative-date</td>
+			<td>Mostra la data in un formato relativo (es:"2 week ago", "2 settimane fa") invece del formato completo della data</td>
+		</tr>
+		<tr>
+			<td>--graph</td>
+			<td>Mostra un grafico ASCII delle diramazioni e delle unioni della cronologia insieme all'output del log</td>
+		</tr>
+		<tr>
+			<td>--pretty</td>
+			<td>Mostra le commit in un formato alternativo. L'opzione include oneline, short, full, fuller, e format</td>
+		</tr>
+		<tr>
+			<td>--oneline</td>
+			<td>Un'opzione di convenienza abbreviazione per --pretty=oneline --abbrev-commit.</td>
+		</tr>
+
+	</table>		
+</section>
+
+<section id="s13">
+	<h2>Limitare l'output delo log</h2>
+	<p>Il metodo più semplice per restringere il  numero delle commit è quello di aggiungere un numero (come visto sopra)</p>
+	<pre>git log -2</pre>
+	<p>restituisce solo le ultime due commit</p>
+
+	<p>Poi ci sono le opzioni temporali come <span class="comando">--since</span> e <span class="comando">--until</span>. Per esempio:</p>
+	<pre>git log --since=2.weeks</pre>
+	<p>mostra la lista dei commit fatti nelle ultime due settimane. <br />
+Questo comando funziona con molti formati. Si può specificare una data (<span class="nota">2008-01-15</span>) o una data relativa come <span class="nota">2 years 1 day 3 minutes ago</span>.
+	</p>
+
+	<p>E' possibile, del resto, filtrare l'elenco delle commit che corrispondono a dei criteri di ricerca. Per esempio:</p>
+	<pre>git log --author</pre>
+	<p>permette di filtrare per uno specifico autore</p>
+
+	<p>La seguente è una lista di quelle più comuni</p>
+	<table class="tabella" border="0" cellspacing="1" cellpadding="3">
+		<tr>
+			<td>-(n)</td>
+			<td>Solo le ultime n commit</td>
+		</tr>
+		<tr>
+			<td>--since</td>
+			<td>Mostra solo le commit fatte dalla data specificata	</td>
+		</tr>
+		<tr>
+			<td>--after</td>
+			<td>Mostra solo le commit fatte dalla data specificata</td>
+		</tr>
+		<tr>
+			<td>--until</td>
+			<td>Mostra solo le commit fatte entro la data specificata</td>
+		</tr>
+		<tr>
+			<td>--before</td>
+			<td>Mostra solo le commit fatte entro la data specificata</td>
+		</tr>
+		<tr>
+			<td>--author</td>
+			<td>Mostra solo le commit dell'autore specificato</td>
+		</tr>
+		<tr>
+			<td>--committer</td>
+			<td>Mostra solo le commit del committer specificato</td>
+		</tr>
+	</table>
+
+</section>
+
+<section id="s14">
+	<h2>Filtrare i risultati in base a data e ora</h2>
+	<p>Usando git log senza specificare un orario equivale a specificare l'orario attuale del proprio computer (mantenendo la differenza con l'UTC). L'UTC è il fuso orario di riferimento (quello di <span class="nota">Greenwich</span>).
+	</p>
+	<p>Per sapere cosa è stato committato nel repository di Git (git://git.kernel.org/pub/scm/git/git.git) il 29/04/2014 (usando come riferimento il fuso orario impostato sul tuo computer):
+	</p>
+	<pre>git log --after="2014-04-29 00:00:00" --before="2014-04-29 23:59:59" \ --pretty=fuller</pre>
+	<p>Il risultato che si ottiene eseguendo questo comando cambia in base al fuso orario dove viene eseguito. È quindi consigliato usare un orario assoluto quando si usano le opzioni <span class="comando">--after</span> e <span class="comando">--before</span>, come per esempio l'ISO 8601 (che include anche informazioni sul furo orario), così da ottenere gli stessi risultati indipendentemente dal fuso orario.
+	</p>
+	
+	<p>Per ottenere le commit eseguite in un determinato istante (per esempio il 29 Aprile 2013 alle 17:07:22 CET), possiamo eseguire:</p>
+	<pre>git log  --after="2013-04-29T17:07:22+0200" \ --before="2013-04-29T17:07:22+0200" --pretty=fuller</pre>
+	<p>Data e ora di <span class="nota">AuthorDate</span> e <span class="nota">CommitDate</span> (prodotti dall'output) hanno un formato standard (<span class="comando">--date=default</span>) che mostra le informazioni sul fuso orario, rispettivamente, dell'autore e di chi ha eseguito la commit
+	</p>
+	
+	<p>Altri formati utili sono:</p>
+	<table class="tabella" border="0" cellspacing="1" cellpadding="3">
+		<tr>
+			<td>--date=iso</td>
+			<td>ISO 8601</td>
+		</tr>
+		<tr>
+			<td>--date=rfc</td>
+			<td>RFC 2822</td>
+		</tr>
+		<tr>
+			<td>--date=raw</td>
+			<td>i secondi passati dall'1/1/1970 UTC</td>
+		</tr>
+		<tr>
+			<td>--date=local</td>
+			<td>l'orario del tuo attuale fuso</td>
+		</tr>
+		<tr>
+			<td>--date=relative</td>
+			<td>per esempio: "2 ore fa"</td>
+		</tr>
+
+
+	</table>
+</section>
+
+<section id="s15">
+	<h2>Recuperare una sola commit con <span class="comando">show</span></h2>
+	<p>Se si volesse rilevare e visualizzare una sola specifica commit, invece di doverle scorrere, si potrebbe usare l'opzione <span class="comando">show</span> seguita dall'hash della commit desiderata. Ovviamente bisogna prima recuperare l'hash di riferimento e nel caso il miglior comando da utilizzare potrebbe essere <span class="comando">--pretty</span> seguito dalle opzioni <span class="comando">oneline</span> oppure <span class="comando">format</span>:
+	</p>
+	<pre>
+git log --pretty=oneline	
+git log --pretty=format:"%H - %an, %ar : %s"
+</pre>
+	<p>Ottenuta la lista degli hash possiamo dare <span class="comando">show</span> seguito dall'hash desiderato:</p>	
+	<pre>git show  d679eec3f3991feed2f75eb790cc3f1e87d1ec64</pre>
+	<p>ci verrà mostrata tutta la commit e relative informazioni.</p>
+
+	<p>Si potrebbe ottenere il risultato anche passando parte dell'hash:</p>
+	<pre>git show  d679ee</pre>
+</section>
+
+<section id="s16">
+	<h2>Usare una GUI per visualizzare la cronologia</h2>
+	<p>E' possibile utilizzare	uno strumento più grafico per visualizzare la cronologia delle commit, un programma in Tck/Tk chiamato <span class="nota">gitk</span> che viene distribuito con Git. <span class="nota">Gitk</span> è fondamentalmente uno strumento grafico come <span class="comando">git log</span>, e accetta quasi tutte le opzioni di filtro supportate da <span class="comando">git log</span>. 
+In pratica bisogna dare <span class="comando">gitk</span> invece di <span class="comando">git</span> seguito dalle opzioni
+	</p>
+	<pre>
+gitk
+gitk --stat
+gitk --word-diff
+</pre>
+	<p>Il grafico prodotto  è carino e per chiuderlo basta digitare <span class="comando">Ctrl + q</span></p>
+
+</section>
+
+<section id="s17">
+	<h2>Modificare l'ultima commit </h2>
+	<p>Uno degli annullamenti più comuni si verifica quando si committa qualcosa troppo presto e magari si dimenticha di aggiungere qualche file, o si sbaglia qualcosa nel messaggio di commit. Se si vuole modificare questa commit si può eseguire il comando commit con l'opzione <span class="comando">--amend</span>:
+	</p>
+	<pre>git commit --amend</pre>
+	<p>Questo comando usa l'area di stage per la commit. Se non si sono fatte modifiche dall'ultima commit (per esempio, esegui questo comando subito dopo la tua commit precedente), allora lo snapshot sarà identico e  si potrà cambiare il messaggio di commit.
+	</p>
+
+	<p>Per esempio, se si fa una commit e si realizza di non aver messo nello stage le modifiche a un file e si vuole aggiungerle a questa commit, si può fare così:
+	</p>
+	<pre>
+git commit -m 'initial commit'
+git add forgotten_file
+git commit --amend
+</pre>
+	<p>Dopo questi tre comandi si avrà una sola commit: la seconda sovrascrive la prima.</p>
+</section>
+
+<section id="s18">
+	<h2>Rimuovere un file dall'area di stage</h2>
+	<p>Supponiamo che si sono modificati due file e si vuole committarli come modifiche separate, ma accidentalmente si digita <span class="comando">git add *</span> e quindi vengono messi entrambi nello stage. Come si può rimuoverne uno? Il comando <span class="comando">git status</span> ci ricorda:
+	</p>
+	<pre>
+<span class="nota">On branch master
+Changes to be committed:
+	(use "git reset HEAD <file>..." to unstage)
+
+		modified:   README.txt
+		modified:   benchmarks.rb</span>
+</pre>
+	<p>sotto <span class="nota">Changes to be committed:</span> Git ci consiglia cosa fare nel caso si volesse togliere dallo stage i file aggiunti e cioè di usare il comando <span class="comando">reset HEAD</span>. Quindi nel nostro caso, per rimuovere <q>benchmarks.rb</q>, diamo:
+	</p>
+	<pre>git reset HEAD benchmarks.rb</pre>
+	<p>se ora rivediamo lo status</p>
+	<pre>git status</pre>
+	<p>avremo:</p>
+	<pre>
+<span class="nota">On branch master
+Changes to be committed:
+	(use "git reset HEAD <file>..." to unstage)
+
+	modified:   README.txt
+
+Changes not staged for commit:
+	(use "git add <file>..." to update what will be committed)
+	(use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   benchmarks.rb</span>
+</pre>
+
+	<p>l file <q>benchmarks.rb</q> ora è modificato ma non più nello stage. Mentre <q>README.txt</q> è rimasto nello stage </p>
+
+</section>
+
+<section id="s19">
+	<h2>Annullare le modifiche a un file</h2>
+	<p>Come fare se ci si rende conto che non si vuole più mantenere le modifiche al file <q>benchmarks.rb</q>? Come annullarle facilmente — ritornare a come era prima dell'ultima commit (o al clone iniziale, o comunque lo avevi nella tua directory di lavoro)? Fortunatamente <span class="comando">git status</span> ci dice come farlo</span>. <br />
+Nell'ultimo output di esempio, Git ci consiglia il da fare nel nostro caso, nella riga:
+	</p>
+	<pre><span class="nota">(use "git checkout -- <file>..." to discard changes in working directory)</span></pre>
+	<p>Pertanto diamo:</p>
+	<pre>git checkout -- benchmarks.rb</pre>
+	<p>e per verificare rivediamo lo status:</p>
+	<pre>git status</pre>
+	<p>avremo:</p>
+	<pre>
+<span class="nota">On branch master
+Changes to be committed:
+	(use "git reset HEAD <file>..." to unstage)
+
+	modified:   README.txt	</span>
+</pre>
+	<p>Bisogna capire quanto questo sia un comando pericoloso: tutte le modifiche fatte al file sono sparite: il file è stato praticamente sovrascritto con un altro file. Non usare mai questo comando a meno che non si è assolutamente certi di non volere il file. 
+	</p>
+	<p class="nota">### NB: qualsiasi cosa che sia stata committata in Git può quasi sempre essere recuperata. Tutte le commit che erano sulle diramazioni che sono state cancellate o sovrascritte con una commit <span class="comando">--amend</span> possono essere recuperate (vedere il Capitolo 9 per il recupero dei dati). Ma qualsiasi cosa persa che non sia stata mai committata non la si vedrà mai più.
+</p>
+</section>
+
+<section id="s20">
+	<h2>Vedere i propri server remoti</h2>
+	<p>I repository remoti sono versioni dei progetti ospitate da qualche parte su Internet o sulla rete locale. <br />
+Per vedere i propri server remoti configurati, si esegue il comando <span class="comando">git remote</span>. Questo elenca i nomi brevi di ogni nodo remoto che si è configurato. <br />
+Se si è clonato il proprio repository, si dovrebbe vedere almeno <span class="nota">origin</span> — che è il nome predefinito che Git da al server clonato:
+	</p>
+	<pre>gir remote</pre>
+	<p>Aggiungendo l'opzione <span class="comando">-v</span> Git mostra l'URL associato </p>
+	<pre>git remote -v</pre>
+	<p>Il mio output (24/04/2015):</p>
+	<pre>
+<span class="nota">origin	https://github.com/MikePap/KaiPai.git (fetch)
+origin	https://github.com/MikePap/KaiPai.git (push) </span>
+</pre>
+	<p>Si possono avere più di un server remoto e nel caso verranno elencati. <br />
+NOTA BENE: soltanto <span class="nota">origin</span> è un URL SSH, e quindi è l'unico dove si può inviare il proprio lavoro con <span class="comando">push</span> (vedere Capitolo 4).
+	</p>
+</section>
+
+<section id="s21">
+	<h2>Aggiungere un repository remoto</h2>
+	<p>Per aggiungere un nuovo repository Git remoto con un nome breve a cui si possa riferire facilmente: </p>
+	<pre>git remote add [nome breve] [url]</pre>
+
+	<p>Per esempio:</p>
+	<pre>git remote add pol https://github.com/paulboone/ticgit</pre>
+	<p>aggiunge il repo indicato col nome di riferimento <span class="nota">pol</span>. Ora si potrà usare il nome <span class="nota">pol</span> alla riga di comando al posto dell'URL intero. <br />
+Se si vuole, per esempio, prendere tutto ciò che ha <span class="nota">pol</span>, ma che non sono ancora nel tuo repository, bisogna usare il comando <span class="comando">fetch</span>, quindi nel nostro caso si può eseguire: 
+	</p>
+	<pre>git fetch pol</pre>
+</section>
+
+<section id="s22">
+	<h2>Aggiungere un repository locale in remoto a GitHub</h2>
+	<p>Quando di ha un repository Git in locale, si aggiunge GitHub come remoto e si invia il proprio ramo master:</p>
+	<pre>
+git remote add origin git@github.com:testinguser/iphone_project.git
+git push origin master
+</pre>
+	<p>Ora il progetto è ospitato su GitHub, e si può fornire l'URL a chiunque per condividere il progetto.</p>
+</section>
+
+<section id="23">
+	<h2>Scaricare e condividere coi server remoti</h2>
+	<p>Come appena visto, per scaricare dati da un progetto remoto, si usa: <span class="comando">git fetch &lt;nome-remoto&gt;</span>. 
+Il comando va sul progetto remoto e scarica tutti i dati dal progetto remoto che ancora non si hanno. Dopo averlo fatto bisogna trovare i riferimenti a tutte le diramazioni di quel server, che si potranno unire o controllare in qualsiasi momento. (Vedere diramazioni e come usarle nel Capitolo 3). <br />
+E' importante notare che il comando <span class="comando">fetch</span> scarica queste informazioni nel proprio repository locale ma non le unisce automaticamente e non modifica alcun file su cui si sta lavorando. Dovremo essere noi a unirle al nostro lavoro, manualmente.
+	</p>
+	<p>Se si ha una diramazione impostata per tracciarne una remota (vedere la prossima sezione e il Capitolo 3), si può usare il comando <span class="comando">git pull</span> per scaricare e unire automaticamente una diramazione remota in quella attuale. Questo potrebbe essere un modo più facile e più comodo per lavorare. <br />
+In modo predefinito, il comando <span class="comando">git clone</span> imposta automaticamente la propria diramazione master per tracciare il master del server che si è clonato (supponendo che il server remoto abbia una diramazione master). 
+Eseguendo <span class="comando">git pull</span> vengono generalmente scaricati i dati dal server da cui si è fatto il clone originario e uniti automaticamente con il codice su cui si sta lavorando.
+	</p>
+	<p>In altre parole se si è aggiunto un file direttamente sul server remoto (GitHub) bisogna usare il comando <span class="comando">git pull</span> per scaricare quel file in locale. <br />
+Ho provato a creare un file direttamente su GitHub e poi ho dato:
+	</p>
+	<pre>git pull</pre>
+	<p>e il file mi è comparso in locale </p>
+</section>
+
+<section id="s24">
+	<h2>Condividere coi server remoti</h2>
+	<p>Quando il proprio progetto raggiunge uno stato che si vuole condividere, bisogna caricarlo sul server principale. Il comando è <span class="comando">push</span>: 
+	</p>
+	<pre>git push [nome-remoto] [diramazione]</pre>
+	<p>
+Se si vuole condividere la diramazione <span class="nota">master</span> sul server <span class="nota">origin</span> si può eseguire il comando seguente per caricare il tuo lavoro sul server:
+	</p>
+	<pre>git push origin master</pre>
+
+	<p>Quando si è fatto la clonazione dal server remoto questi nomi (<span class="nota">origin e master</span>) vengono generalmente definiti automaticamente. In altre parole, questo comando funziona solamente se si è clonato il proprio progetto da un server su cui si hanno i permessi di scrittura e se nessun altro ha caricato modifiche nel frattempo. <br /> 
+Se si clona un repository assieme ad altri e questi caricano delle modifiche sul server, il proprio invio verrà rifiutato. Si dovrà prima scaricare le loro modifiche e incorporarle con le proprie per poterle poi inviare. (Vedere il Capitolo 3 su come fare il push su server remoti)
+	</p>
+	<p>Esempio: dopo aver creato (o modificato) un file in locale, prima di tutto bisogna aggiungerlo allo stage poi committare ed infine dare il <span class="comando">push</span>
+	</p>
+	<pre>
+git add localeProva
+git commit -m 'committ eseguita per aggiungere provaLocale'
+git push origin master
+</pre>
+</section>
+
+<section id="s25">
+	<h2>Controllare un server remoto</h2>
+	<p>Per avere informazioni su una particolare server remoto, si può usare il comando <span class="comando">git remote show [nome-remoto]</span>. <br />
+Per esempio, dando il comando e passando <span class="comando">origin</span>:
+	</p>
+	<pre>git remote show origin</pre>
+	<p>mostra gli URL del repository remoto oltre alle informazioni sulle diramazioni tracciate. Il comando ci dice anche che se si esegue <span class="comando">git pull</span> mentre si è su master, integrerà le modifiche sul master remoto dopo aver scaricato tutti i riferimenti remoti. Elenca anche i riferimenti remoti scaricati.
+	</p>
+</section>
+
+<section id="s26">
+	<h2>Rimuovere e rinominare server remoti</h2>
+	<p>Se si vuole rinominare un riferimento, con versioni più recenti di Git, lo si può fare con <span class="comando">git remote rename</span> per cambiare il nome breve di un server remoto. <br />
+Se vuoi per esempio rinominare pb in paul, puoi farlo con <span class="comando">git remote rename</span>:
+	</p>
+	<p>Prima ho fatto l'esempio di come aggiungere il repository remoto di  "https://github.com/paulboone/ticgit" a cui ho dato come nome di riferimento <span class="nota">pol</span>; volendolo rinominare in <span class="nota">paul</span>:
+	</p>
+	<pre>
+git remote rename pol paul
+git remote
+</pre>
+	<p>l'output sarà:</p>
+	<pre>
+<span class="nota">origin
+paul 
+</pre>
+	
+	<p>Per rimuovere il server usare <span class="comando">git remote rm &lt;nome-server&gt;</span>. <br />
+Volendo rimuovere il server aggiunto, nell'esempio precedente, di <span class="nota">paul</span> :
+	</p>
+	<pre>git remote rm paul</pre>
+</section>
+
+<section id="s27">
+	<h2>Etichette</h2>
+	<p>Git da la possibilità di contrassegnare (tag) dei punti specifici della cronologia come importanti. Le persone normalmente usano questa funzionalità per segnare i punti di rilascio (<span class="nota">v1.0, e così via</span>).
+L'etichetta va creata subito dopo la commit, in tal modo andrà a rappresentarla.
+	</p>
+	<p>Git ha due tipi di etichette: <span class="nota">semplici ('lightweight') e annotate ('annotated')</span>. <br />
+Un'etichetta semplice è molto simile a una ramificazione che non cambia mai: <span class="nota">è semplicemente un riferimento ad una commit specifica</span>. <br />
+Le etichette annotate, al contrario, sono salvate come oggetti complessi nel database Git. Ne viene calcolato il checksum, contengono il nome, l'email e la data di chi ha inserito l'etichetta, hanno un messaggio d'etichetta; e possono essere firmate e verificate con GPG (GNU Privacy Guard). 
+	</p>
+
+	<h3>Creare Etichette annotate</h3>
+	<p>Per creare un'etichetta annotata in Git il modo più facile è specificare <span class="comando">-a</span> quando si esegue il comando tag:</p>
+	<pre>git tag -a v1.4 -m 'my version 1.4'</pre>
+	<p>l'opzione <span class="comando">-m</span> specifica un messaggio per l'etichetta. Se  non specificato Git lancerà il tuo editor così da scriverla.	</p>
+
+	<h3>Creare Etichette semplici</h3>
+	<p>Per creare un'etichetta semplice, non bisogna usare le opzioni <span class="comando">-a</span>, <span class="comando">s</span> o <span class="comando">-m</span>:</p>
+	<pre>git tag v1.5</pre>
+
+</section>
+
+<section id="s28">
+	<h2>Elencare l'etichette</h2>
+	<pre>git tag</pre>
+	<p>Questo comando elenca le etichette in ordine alfabetico; l'ordine con cui appaiono non ha importanza.</p>
+	
+	<p>Se si è interessato a vedere solo quelli della serie 1.4.2 :</p>
+	<pre>git tag -l 'v1.4.2.*'</pre>
+	<p>Esempio di output:</p>
+	<pre>
+v1.4.2.1
+v1.4.2.2
+v1.4.2.3
+ecc..
+</pre>
+
+</section>
+
+<section id="s29">
+	<h2>Vedere la commit associata al tag ('show')</h2>
+	<p>Il comando <span class="comando">git show &lt;tag&gt;</span> restituisce alcune informazioni sulla commit associata al tag definito come opzione:</p>
+	<pre>git show v1.4</pre>
+
+	<h3>Il comando <span class="comando">show</span></h3>
+
+	<p>Il comando <span class="comando">git show</span> restituisce informazioni sulle commit. Dato senza opzioni restituisce informazioni sull'ultima commit, mentre ... :</p>
+
+	<pre>
+git show			<span class="nota">informazioni sull'ultima commit</span>
+git show -3			<span class="nota">informazioni sulle ultime tre commit</span>
+</pre>
+
+</section>
+
+<section id="s30">
+	<h2>Etichette firmate</h2>
+	<p>Si possono anche firmare le etichette con GPG, presumendo che si abbia una chiave privata. <br />
+Tutto quello che bisogna fare è usare <span class="comando">-s</span> invece di <span class="comando">-a</span> :
+	</p>
+	<pre>git tag -s v1.5 -m 'my signed 1.5 tag'</pre>
+	<p>Se si esegue <span class="comando">git show</span> per questa etichetta, si vedrà che è stata allegata la propria firma GPG:</p>
+
+	<p>Per verificare un'etichetta firmata, bisogna usare <span class="comando">git tag -v [nome-tag]</span>. Questo comando usa GPG per verificare la verifica. Affinché funzioni c'è bisogno che la chiave pubblica del firmatario sia nel proprio portachiavi:
+	</p>
+	<pre>git tag -v v1.4.2.1</pre>
+
+</section>
+
+<section id="s31">
+	<h2>Etichettare in un secondo momento</h2>
+	<p>E' possibile etichettare delle commit precedenti in cui si sia dimenticato di farlo. In questo caso bisogna recuperare l'<b>hash</b> della commit a cui si vuole aggiungere il tag. Qui ci viene in aiuto il comando <span class="comando">git log --pretty=oneline</span> che ci restituisce tutte le commit con il rispettivo hash e descrizione della commit. Recuperato l'hasc diamo:
+	</p>
+	<pre>git tag -a v1.2 -m 'version 1.2' 9fceb02kjkjkj...</pre>
+	<p>il comando <span class="comando">show</span> ci permette di verificare il risultato</p>
+	<pre>git show v1.2</pre>
+
+</section>
+
+<section id="s32">
+	<h2>Condividere le etichette</h2>
+	<p>Normalmente il comando <span class="comando">git push</span> non invia le etichette sui server remoti. Bisogna farlo esplicitamente, dopo averle create, per condividerle con il server. Questo procedimento è come la condivisione delle diramazioni remote: bisogna eseguire <span class="comando">git push origin [nome-tag]</span>
+	</p>
+	<pre>git push origin v1.5 </pre>
+
+	<p>Se si hanno molte etichette che si vuole inviare tutte assieme, lo si può farlo usando l'opzione <span class="comando">--tags</span> col comando <span class="comando">git push</span>. </p>
+	<pre>git push origin --tags</pre>
+	<p>Questo trasferirà al server remoto tutte le tue etichette che non sono ancora presenti</p>
+
+</section>
+
+
+</article>
+
+									<div id="freccia_sali"><div></div> </div> 
+
+<br /><br /><br /><br /><br /><br /><br /><br />
+
+<script type="text/javascript" src="JS/min/scorrimentoPagina2.js"></script>
+<script type="text/javascript">
+
+var sezioni = document.querySelector(".sezioni");
+sezioni.addEventListener("change", function (){
+	var valSez = this.value;
+	var pattern = "#" + valSez;
+		document.location.href = pattern;
+}, false);
+
+// Per lo scorrimento del documento, verso l'alto
+var obj = new ScrollPage('1000', 100, 'freccia_sali', 300);
+obj.showFreccia();
+obj.clickScroll();
+//bloccaPropagazione();	
+
+</script>
+
+
+
+</body>
+</html>
+
