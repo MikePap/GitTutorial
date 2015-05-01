@@ -643,12 +643,13 @@ Se si vuole, per esempio, prendere tutto ciò che ha <span class="nota">pol</spa
 
 <section id="s22">
 	<h2>Aggiungere un repository locale in remoto a GitHub</h2>
-	<p>Quando di ha un repository Git in locale, si aggiunge GitHub come remoto e si invia il proprio ramo master:</p>
+	<p>Quando si ha un repository Git in locale, e si vuole aggiungerlo al server remoto <b>GitHub</b> bisogna per prima cosa creare un nuovo repository su <q>GitHub</q> e ottenere l'URL del progetto e poi dare i comandi <span class="comando">git remote add url</span> e <span class="comando">git push origin master</span> come visto su:
+	</p>
 	<pre>
-git remote add origin git@github.com:testinguser/iphone_project.git
-git push origin master
+git remote add origin https://github.com/MikePap/GitTutorial.git
+git push -u origin master
 </pre>
-	<p>Ora il progetto è ospitato su GitHub, e si può fornire l'URL a chiunque per condividere il progetto.</p>
+	<p>Ora tutti i file del repository in locale sono stati trasferiti nel repository <span class="nota">GitTutorial</span> ospitato su <q>GitHub</q>.</p>
 </section>
 
 <section id="s23">
