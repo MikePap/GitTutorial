@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<title>Partecipazione Progetti  </title>
+<link rel="stylesheet" href="CSS/git.css" type="text/css"/>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+
+<div class="uelleCapitoli" >
+	<ul class="capitoliGit">
+		<li><a href="Master.html">Master Git Tutorial</a> </li>
+		<li><a href="git1.html">cap.1 - In generale</a></li>
+		<li><a href="git2.html">cap.2 - Basi di Git</a></li>
+		<li><a href="git3.html">cap.3 - Diramazioni</a></li>
+		<li><a href="git5.html">cap.5 - </a></li>
+		<li><a href="git6.html">cap.6 - </a> </li>
+		<li><a href="git7.html">cap.7 - </a> </li>
+	</ul>
+</div>
+
+<article>
+	<div class="numCapitolo"> <span class="spanNC">cap. 4</span></div> 
+
+				<h1>Partecipare ai progetti</h1>
+
+<section class="listaArgomenti">
+	Argomenti
+	<select name="sezioni" class="sezioni">
+		<optgroup label="Contribuire ai progetti">
+			<option value="s1"> Contribuire a un progetto</option>
+			<option value="s2">Piccoli gruppi privati (due sviluppatori)</option>
+			<option value="s3">Piccolo progetto pubblico</option>
+			
+						
+		</optgroup>
+
+	</select>
+</section>
+
+<section id="s1">
+	<h2>Contribuire a un progetto</h2>
+	<p>La difficoltà maggiore nel descrivere questo processo è che ci sono molte variazioni su come può venir fatto. Poiché Git è molto flessibile la gente può lavorare insieme in molti modi (ed effettivamente lo fa). 
+	</p>
+	<p>Il progetto di Git fornisce un documento che da molti suggerimenti circa le commit per/da cui creare patch: puoi trovarlo nel codice sorgente di Git nel file <span class="nota">Documentation/SubmittingPatches</span>
+	</p>
+</section>
+
+<section id="s2">
+	<h2>Piccoli gruppi privati (due sviluppatori)</h2>
+	<p>Vediamo come potrebbe essere la situazione quando due sviluppatori iniziano a lavorare insieme con un repository condiviso. Il repository è privato, cioè aperto soltanto ai due sviluppatori. 
+	</p>
+	<p>1) Il primo sviluppatore, John, clona un repository, fa dei cambiamenti ed esegue il commit localmente</p>
+	<pre>
+git clone john@githost:simplegit.git		<span class="nota">clona il progetto dal server</span>
+cd simplegit/					<span class="nota">si sposta nella directory di lavoro</span>
+vim lib/simplegit.rb				<span class="nota">esegue il lavoro</span>
+git commit -am 'rimosso valore non valido'	<span class="nota">esegue la commit</span>
+</pre>
+	
+	<p>2) Il secondo sviluppatore, Jessica, fa la stessa cosa - clona il repository e committa le modifiche</p>
+	<pre>
+clonazione repo, esecuzione lavoro e ...
+git commit -am 'aggiunto il processo di reset'
+</pre>
+	<p>In più, Jessica invia il suo lavoro al server con una <span class="comando">push</span>:</p>
+	<pre>git push origin master</pre>
+
+	<p>3) Anche John cerca di eseguire una <span class="comando">push</span> ma lo fa dopo Jassica e fallisce:</p>
+	<pre>git push origin master</pre>
+	<p>l'output dell'errore che riceve:</p>
+	<pre>
+<span class="nota">To john@githost:simplegit.git
+ ! [rejected]        master -> master (non-fast forward)
+error: failed to push some refs to 'john@githost:simplegit.git'	</span>
+</pre>
+	<p>L'errore è dovuto al fatto che il puntatore di John non è sincronizzato con quello del server perchè Jessica con la sua commit l'ha portato in avanti. In altre parole	deve prima scaricare le modifiche di Jessica e unirle alle sue prima di poter fare una <span class="comando">push</span>:
+	</p>
+	<pre>git fetch origin</pre>
+	<p>Ora la sincronizzazione delle commit è fatta e l'ultima commit è nel locale di John. Ma <span class="comando">git fetch origin</span> non apporta le modifiche ai file locali pertanto prima di poter fare la <span class="comando">push</span> deve fare questa operazione con il comando <span class="comando">merge</span>:  
+	</p>
+	<pre>git merge origin/master</pre>
+	<p>John ora può testare il suo codice per essere sicuro che continui a funzionare correttamente e può quindi eseguire la <span class="comando">push</span> del tutto sul server:
+	</p>
+	<pre>git push origin master</pre>
+
+	<p>4) Jessica nel frattempo sta lavorando a un altro ramo. Ha creato un branch chiamato <span class="nota">problema54</span> e ha eseguito tre commit su quel branch. Poiché non ha ancora recuperato le modifiche di John deve quindi sincronizzarsi con John, quindi esegue:
+	</p>
+	<pre>git fetch origin</pre>
+	<p>Jessica pensa che il suo ramo sia pronto, però vuole sapere con cosa deve unire il suo lavoro prima di eseguire la <span class="comando">push</span>. <br />
+Esegue quindi <span class="comando">git log</span> per scoprirlo:
+	</p>
+	<pre>git log --no-merges origin/master ^problema54</pre>
+	<p>esempio di output:</p>
+	<pre>
+<span class="nota">commit 738ee872852dfaa9d6634e0dea7a324040193016
+Author: John Smith <jsmith@example.com>
+Date:   Fri May 29 16:01:27 2009 -0700
+
+    rimosso valore non valido	</span>
+</pre>
+	<p>Ora, Jessica può unire il lavoro del suo branch nel suo <span class="nota">master</span>, quindi le modifiche di John (<span class="nota">origin/master</span>) nel suo branch <span class="nota">master</span>, e ritrasmettere il tutto al server con una <span class="comando">push</span>. <br />
+Per prima cosa torna al suo branch <span class="nota">master</span> per integrare il lavoro svolto nell'altro branch:
+	</p>
+	<pre>git checkout master</pre>
+	<p>Può decidere di unire prima <span class="nota">origin/master</span> o <span class="nota">problema54</span>: entrambi sono flussi principali, per cui non conta l'ordine. Il risultato finale sarà lo stesso a prescindere dall'ordine scelto, ma la cronologia sarà leggermente differente. <br />
+Lei sceglie di fare il <span class="comando">merge</span> prima di <span class="nota">problema54</span>:
+	</p>
+	<pre>git merge problema54</pre>
+	<p>Non ci sono stati problemi: tutto è stato molto semplice. <br />
+Quindi Jessica unisce il lavoro di John (<span class="nota">origin/master</span>):
+	</p>
+	<pre>git merge origin/master</pre>
+	<p>Ora <span class="nota">origin/master</span> è raggiungibile dal ramo <span class="nota">master</span> di Jessica, cosicché lei sia capace di eseguire delle push con successo (supponendo che John non abbia fatto altre push nel frattempo):
+	</p>
+	<pre>git push origin master</pre>
+
+</section>
+
+<section id="s3">
+	<h2>Piccolo progetto pubblico</h2>
+	<p>Contribuire ad un progetto pubblico è leggermente differente. Poiché non si ha il permesso di aggiornare direttamente i rami del progetto, si deve far avere il proprio lavoro ai <b>mantenitori</b> in qualche altro modo. <br /> 
+Questo primo esempio descrive come contribuire con i <b>fork</b> su host Git che lo supportano in maniera semplice.  I siti di <q>repo.or.cz</q> e <q>GitHub</q> lo supportano, e molti mantenitori di progetti si aspettano questo tipo di contribuzione.
+	</p>
+	<p>Per iniziare probabilemnte bisogna clonare il repository principale, creare un branch per le modifiche che si programma di fare, quindi lavorare. <br /> La sequenza è grosso modo questa:
+	</p>
+	<pre>
+git clone (url)
+cd project
+git checkout -b funzionalitaA
+(lavoro)
+git commit
+(lavoro)
+git commit
+</pre>
+	
+	<p>Quando il lavoro sul proprio branch è completato e si è pronti per condividerlo con i mantenitori, bisogna andare alla pagina principale del progetto e cliccare sul pulsante <b>Fork</b>, creando la copia modificabile del progetto. <br />
+Si dovrà quindi aggiungere l'URL di questo nuovo repository come un secondo remoto, chiamato in questo esempio <span class="nota">miofork</span>:
+	</p>
+	<pre>git remote add miofork (url)</pre>
+
+	<p>Dopodichè si dovrà eseguire una <span class="comando">push</span> del proprio lavoro verso il nuovo repository. È più semplice fare la <span class="comando">push</span> del branch a cui si sta lavorando piuttosto che unirlo al proprio master e fare la <span class="comando">push</span> di quest'ultimo. La ragione è che se il lavoro non verrà accettato, oppure lo sarà solo in parte, non si dovrà ripristinare il proprio master. <br /> Se i mantenitori uniscono, fanno un <span class="comando">rebase</span>, o prendono pezzi dal tuo lavoro col <span class="comando">cherry-pick</span>, si otterrà il nuovo <span class="nota">master</span> alla prossima <span class="comando">pull</span> dal loro repository:
+	</p>
+	<pre>git push myfork funzionalitaA</pre>
+	<p>Eseguita la <span class="comando">push</span> del lavoro sul nuovo/proprio fork, bisogna avvisare i mantenitori. <br />
+Questo passaggio viene spesso definito <q><b>richiesta di pull</b></q> (<span class="nota">pull request</span>), e lo si può fare tramite lo stesso sito (<q>GitHub</q> ha un pulsante <q>pull request</q> che automaticamente notifica i mantenitori) o eseguire il comando <span class="comando">git request-pull</span> e inviare manualmente via email l'output ai mantenitori. 
+	</p>
+	<p>Il comando <span class="comando">request-pull</span> riceve come parametri il branch di base sul quale si vuol fare applicare le modifiche e l'URL del repository Git da cui prenderle, e produce il sommario di tutte queste modifiche in output. <br />
+Se, per esempio, Jessica volesse inviare a John una richiesta di <span class="comando">pull</span>, e avesse eseguito due commit sul branch di cui ha appena effettuato il <span class="comando">push</span>, può eseguire questo (il seguente in GitHub non serve perchè c'è il pulsante <span class="nota">pull request</span>):	
+	</p>
+	<pre>git request-pull origin/master miofork</pre>
+	<p>L'output può essere inviato ai mantenitori: riporta da dove è stato creato il nuovo branch, un riassunto delle commit e da dove si possono scaricare.
+	</p>
+
+	<p>In un progetto dove non si è il mantenitore normalmente è comodo avere un branch come <span class="nota">master</span> sempre collegato a <span class="nota">origin/master</span> e lavorare su altri branch che si possono eliminare nel caso non venissero accettati. <br />
+Se per esempio si vuole aggiungere un'altra caratteristica al progetto, invece di continuare a lavorare sul branch di cui si è appena fatto la <span class="comando">push</span>, risulta più efficace creare un altro ramo partendo dal master del repository:
+	</p>
+	<pre>
+git checkout -b funzionalitaB origin/master
+(lavoro)
+git commit
+git push miofork funzionalitaB
+(email al mantenitore)
+git fetch origin
+</pre>
+
+	<p>Ora ognuno dei propri lavori è separato come in una coda di modifiche che si possono riscrivere, ribasare e modificare senza che gli argomenti interferiscano o dipendano dagli altri.
+</p>
+
+ora c'è una parte con dei <span class="nota">rebase</span> .... e pertanto interrompo qui
+
+</section>
+
+
+
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+
+</article>
+
+
+									<div id="freccia_sali"><div></div> </div> 
+
+<br /><br /><br /><br /><br /><br /><br /><br />
+
+<script type="text/javascript" src="JS/min/scorrimentoPagina2.js"></script>
+<script type="text/javascript">
+
+var sezioni = document.querySelector(".sezioni");
+sezioni.addEventListener("change", function (){
+	var valSez = this.value;
+	var pattern = "#" + valSez;
+		document.location.href = pattern;
+}, false);
+
+// Per lo scorrimento del documento, verso l'alto
+var obj = new ScrollPage('1000', 100, 'freccia_sali', 300);
+obj.showFreccia();
+obj.clickScroll();
+//bloccaPropagazione();	
+
+</script>
+
+
+</body>
+</html>
+
