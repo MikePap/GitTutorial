@@ -89,10 +89,6 @@ Pertanto si può iniziare a tracciare i file esistenti col comando <span class="
 	</p>
 
 	<pre>git add .		<span class="nota">(aggiunge tutti i file della directoy compreso le subdirectory)</span></pre>			
-	<pre>git add	leggiMi		<span class="nota">(viene aggiunto il file 'leggiMi')</span>	</pre>
-	<pre>git add *.txt		<span class="nota">(vengono aggiunti tutti i file .txt)</span></pre>
-	<pre>git add *.html		<span class="nota">(vengono aggiunti tutti i file .html)</span>
-ecc..</pre>
 
 	<p>e quindi si fa una prima commit</p>
 	<pre>git commit -m 'Versione iniziale del progetto'</pre>
@@ -131,7 +127,11 @@ git status
 	<p>Quando si traccia un file lo si porta dallo stato di <span class="nota">untracked</span> a diventare <span class="nota">tracked</span>.
 Per tracciare dei nuovi file si usa il comando <span class="comando">git add</span>; per cui per tracciare il file precedentemente creato <q>readMe</q>:
 	</p>
-	<pre>git add readMe</pre>
+	<pre>git add	leggiMi		<span class="nota">(viene aggiunto il file 'leggiMi')</span>	</pre>
+	<pre>git add *.txt		<span class="nota">(vengono aggiunti tutti i file .txt)</span></pre>
+	<pre>git add *.html		<span class="nota">(vengono aggiunti tutti i file .html)</span></pre>
+	<pre>git add .		<span class="nota">(aggiunge tutti i file della directoy compreso le subdirectory)</span></pre>			
+
 	<p>Ora se controlliamo di nuovo lo status Git ci dirà che il file (aggiunto precedentemente) è stato tracciato con la sigla: <span class="nota">Changes to be committed</span>; ora si trova nella <span class="nota">area di stage</span> ed è pronto per essere <span class="nota">committato</span>
 	</p>
 </section>
@@ -183,9 +183,7 @@ git diff --staged		<span class="nota">(uguale al precedente da Git 1.6.1 in poi)
 	<pre>git commit </pre>
 	<p>Dopo aver dato il comando si aprirà il file <q>COMMIT_EDITMSG</q> con l'editor predefinito che visualizzerà il file creati e modificati. <br />
 Se si aggiunge il parametro <span class="comando">-v</span> saranno inserite anche le modofiche stesse. <br />
-<span class="output">'### NB':	Dopo aver modificati il file 'COMMIT_EDITMSG', inserendo il messaggio, non mi viene validata la commit ??? 
-Mi da il seguente messaggio: 'Interruzione del commit a causa di un messaggio di commit vuoto.'
-Forse dipende dall'editor 'gedit' che si apre separatamente dal terminale e non mette in pausa il comando. Forse il programma predefinito 'Vim' si apre interrompendo il comando del terminale
+<span class="output">'### NB': se usato <q>gedit</q> come editor predefinito la commit fallisce. Il consiglio è lasciare come editor predefinito <b>Vim</b> e il problema non si presenta. Quindi il <q>COMMIT_EDITMSG</q> sarà modificato con <q>Vim</q>.
 </span>
 	</p>
 	<p>In alternativa, si puo inserire il messaggio per la commit alla riga di comando della commit specificando l'opzione <span class="comando">-m</span>, come segue:</p>
