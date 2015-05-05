@@ -34,10 +34,16 @@
 			<option value="s1"> Contribuire a un progetto</option>
 			<option value="s2">Piccoli gruppi privati (due sviluppatori)</option>
 			<option value="s3">Piccolo progetto pubblico</option>
-			
-						
+			<option value="s4">Grande progetto pubblico</option>			
 		</optgroup>
-
+		<optgroup label="Mantenere i progetti">
+			<option value="s5">Mantenere progetti</option>
+			<option value="s6">Lavorare coi branch per argomento</option>
+			<option value="s7">Applicare le patch da un'e-mail</option>
+			<option value="s8">Scaricare branch remoti</option>
+			<option value="s9">Determinare cos'è stato introdotto</option>
+			<option value="s10">Integrare il lavoro dei contributori</option>
+		<optgroup>	
 	</select>
 </section>
 
@@ -174,22 +180,282 @@ ora c'è una parte con dei <span class="nota">rebase</span> .... e pertanto inte
 
 </section>
 
+<section id="s4">
+
+	<h2>Grande progetto pubblico</h2>
+	<p>Molti grandi progetti hanno definito delle procedure per l'invio delle patch: si dovranno leggere le specifiche di ciascun progetto, perchè saranno diverse. Tuttavia molti grandi progetti pubblici accettano patch tramite la mailing list degli sviluppatori, vediamo questo caso.
+	</p>
+	<p>Il flusso di lavoro è simile al caso precedente: creazione  di un branch per ognuna delle modifiche sulle quali si intende lavorare. La differenza sta nel modo in cui vengono inviate tali modifiche al progetto. <br />
+Invece di fare un fork del progetto e di inviare le proprie modifiche con una push, si crea una versione e-mail di ogni commit e si invia il tutto per email alla mailing list degli sviluppatori:
+	</p>
+	<pre>
+git checkout -b topicA
+  (work)
+git commit
+  (work)
+git commit
+</pre>
+	<p>
+Ora si hanno due commit che si vuole inviare alla mailing list. Usiamo <span class="comando">git format-patch</span> per generare un file formato <span class="nota">mbox</span> che possa inviare via e-mail alla lista: questo trasforma ogni commit in un messaggio email il cui oggetto è la prima linea del messaggio della commit e il contenuto è dato dal resto del messaggio della commit più la patch delle modifiche. <br />
+La cosa bella di tutto ciò è che, applicando le commit da un'email, vengono mantenute le informazioni delle commit.
+	</p>
+	<pre>git format-patch -M origin/master</pre>
+	<p>esempio di output:</p>
+	<pre>
+<span class="nota">0001-Modifica-di-pera.patch
+0002-Modificato-pera-per-provare-il-format-patch.patch		</span>
+</pre>
+
+	<p>
+Il comando <span class="comando">format-patch</span> visualizza i nomi dei file delle patch che crea. Il parametro <span class="comando">-M</span> indica a Git di tener traccia dei file rinominati. 
+I file che sono salvati all'interno della directory principale. <br />
+esempio di un formato:
+</p>
+	<pre>
+<span class="nota">From 54e6e69c3dc3f4b564acb75ed79f4cdb898c0080 Mon Sep 17 00:00:00 2001
+From: MikePap &lt;1208mike@gmail.com&gt;
+Date: Mon, 4 May 2015 15:53:13 +0200
+Subject: [PATCH 2/2] Modificato pera per provare il 'format-patch'
+
+---
+ pera | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/pera b/pera
+index 2083ad9..aa2a7db 100644
+--- a/pera
++++ b/pera
+@@ -2,5 +2,7 @@ questo file è stato creato in remoto
+ 
+ modifica per una prova con il rebase fatta sul nuovo ramo 'esperimento'
+ 
+-altra modifica
++altra modifica per l'esempio del 'format-patch'
++
++
+ 
+-- 
+1.9.1			</span>
+</pre>
+
+	<p>Si possono anche modificare questi file per aggiungere maggiori informazioni per la mailing list che non saranno visualizzate all'interno del messaggio della commit. <br />
+Se si aggiunge del testo tra la riga con --- e l'inizio della patch (ad esempio la riga pera | ), gli sviluppatori potranno leggerlo ma verrà escluso dal messaggio della commit una volta che la patch sarà applicata.
+	</p>
+
+	<p>Per inviare le patch alla mailing list, si può copiare ed incollare il file nel proprio programma di posta o inviare il tutto dalla riga di comando. Incollare il testo è spesso causa di problemi di formattazione, sopratutto con i client di posta <q>intelligenti</q> che non mantengono correttamente i caratteri di a-capo e altri caratteri di spaziatura. Fortunatamente Git fornisce uno strumento che ci aiuta a inviare correttamente le patch tramite <q>IMAP</q>, che potrebbe facilitare il compito. Istruzioni dettagliate per molti client di posta alla fine del documento <span class="nota">Documention/SubmittingPatches</span>
+	</p>
+
+	<h3>Invio di patch con Gmail</h3>
+	<p>Prima di tutto bisogna configurare la sezione imap nel file <b>~/.gitconfig</b>. Si può configurare ogni parametro separatamente con una serie di comandi <span class="comando">git config</span> o scriverli direttamente con un editor di testo. Alla fine il file di configurazione dovrebbe comunque essere più o meno così:
+	</p>
+	<pre>
+<span class="nota">[imap]
+	folder = "[Gmail]/Drafts"
+	host = imaps://imap.gmail.com
+	user = user@gmail.com
+	pass = p4ssw0rd
+	port = 993
+	sslverify = false		</span>
+</pre>
+	<p>Se il proprio server IMAP non usa SSL, probabilmente le ultime due righe non saranno necessarie e il valore del campo host sarà <q>imap://</q> invece di <q>imaps://</q>. 
+Quando si avrà configurato tutto, si potrà usare <span class="comando">git send-email</span> per inviare la serie di patch alla cartella <b>Bozze</b> del proprio server IMAP:
+	</p>
+	<pre>git send-email *.patch</pre>
+	<pre>
+<span class="nota">0001-Modifica-di-pera.patch
+0002-Modificato-pera-per-provare-il-format-patch.patch
+
+Who should the emails appear to be from? [Jessica Smith <jessica@example.com>]
+Emails will be sent from: Jessica Smith <jessica@example.com>
+Who should the emails be sent to? jessica@example.com
+Message-ID to be used as In-Reply-To for the first email? y					</span>
+	</pre>
+	<p>Per ciascuna patch che si sta per inviare, Git produce alcune informazioni di log</p>
+	<p>A questo punto, bisogna andare nella <b>cartella bozze del proprio account</b>, inserire nel campo "A:" la mailing list alla quale si vuole inviare la patch, magari aggiungendo in copia il mantenitore del progetto o la persona responsabile per quella determinata sezione e mandare l'email.
+</p>
+</section>
+
+<section id="s5">
+	<h2>Mantenere progetti</h2>
+	<p>Mantenere i progetti consiste nell'accettare ed applicare le patch generate con il comando <span class="comando">format-patch</span> e ricevute tramite e-mail oppure nell'integrare le modifiche dei branch remoti che si sono definite nel progetto come remoti.
+	</p>
+</section>
+
+<section id="s6">
+	<h2>Lavorare coi branch per argomento</h2>
+	<p>Quando si pensa di integrare un nuovo lavoro generalmente è una buona idea provarlo in un branch per argomento: un branch temporaneo, creato specificatamente per provare le modifiche dalla patch. <br />
+In questo modo è semplice verificare la singola patch e, se questa non funziona, lasciarla intalterata fino a quando non avremo il tempo di ritornarci. 
+	</p>
+
+	<p>Se si crea un branch col nome dell'argomento della patch che si proverà, per esempio <span class="nota">ruby_client</span> (o qualcosa ugualmente descrittiva), sarà facile individuarlo nel caso si debba temporaneamente lasciare il lavoro sulla patch per ritornarci più avanti. <br />
+Il mantenitore del progetto Git usa dare uno gerarchia ai nomi di questi branch: come <span class="nota">sc/ruby_client</span>, dove <span class="nota">sc</span> sono le iniziali della persona che ha realizzato la patch. 
+Come già detto, si può creare un branch partendo dal master così:
+	</p>
+	<pre>git branch sc/ruby_client master</pre>
+	<p>E, se si vuole passare immediatamente al nuovo branch, si può dare:</p>
+	<pre>git checkout -b sc/ruby_client master</pre>
+	<p>Ora si è pronti per aggiungere il lavoro a questo branch e decidere se lo si vuole unire a uno dei branch principali del proprio progetto.
+	</p>
+</section>
+
+<section id="s7">
+	<h2>Applicare le patch da un'e-mail</h2>
+	<p>Se si ricevono le patch via e-mail e si vuole integrarle nel progetto, bisogna prima applicarle per poterle giudicare. 
+Ci sono due modi per applicare una patch ricevuta via email: con <span class="comando">git apply</span> o con <span class="comando">git am</span>.
+	</p>
+
+	<h3>Applicare una patch con apply</h3>
+	<p>Se si è ricevuto la patch da qualcuno che l'ha generata usando il comando <span class="comando">git diff</span> o un qualsiasi comando <span class="nota">Unix diff</span>, si può applicarla usando <span class="comando">git apply</span>. <br />
+Se si è salvato la patch in '/tmp/patch-ruby-client.patch', si può applicarla così:
+	</p>
+	<pre>git apply /tmp/patch-ruby-client.patch</pre>
+	<p>Ciò modifica i file nella directory corrente. E' quasi uguale ad eseguire il comando <span class="comando">patch -p1</span> per applicare la patch, anche se questo comando è più paranoico e accetta meno corrispondenze di <span class="comando">patch</span>. <br /> 
+Gestisce anche l'aggiunta, la rimozione e il cambio del nome dei file se ciò è descritto nel formato di <span class="comando">git diff</span>, cose che non fa <span class="comando">patch</span>.  <br />
+Infine <span class="comando">git apply</span> segue il modello "applica tutto o rigetta tutto" per cui o vengono applicate tutte le modifiche oppure nessuna, mentre <span class="comando">patch</span> può anche applicarne solo alcune, lasciando la directory corrente in uno stato intermedio. 
+<span class="comando">git apply</span> non creerà una commit: una volta eseguito bisogna eseguire manualmente lo stage delle modifiche e farne la commit.
+	</p>
+	<p>Si può anche usare <span class="comando">git apply --check</span> per verificare se una patch può essere applicata in maniera pulita, prima di applicarla veramente:
+	</p>
+	<pre>git apply --check 0001-seeing-if-this-helps-the-gem.patch</pre>
+	<p>esempio di errore:</p>
+	<pre>
+<span class="nota">error: patch failed: ticgit.gemspec:1
+error: ticgit.gemspec: patch does not apply		</span>
+</pre>
+
+	<p>Se non viene visualizzato alcun output, allora la patch può essere applicata in maniera pulita. Questo comando restituisce un valore diverso da zero se la verifica fallisce, quindi si può usarlo anche in uno script.
+	</p>
+
+	<h3>Applicare una patch con am</h3>
+	<p>Se il contributore è abbastanza bravo a usare il comando <span class="comando">format-patch</span> per generare la sua patch, allora il tuo lavoro sarà più facile perché la patch già contiene le informazioni sull'autore e un messaggio di commit. <br /> 
+Conviene incoraggiare i collaboratori ad utilizzare <span class="comando">format-patch</span> invece di <span class="comando">diff</span>. A quel punto basterà usare solo <span class="comando">git apply</span> per le patch precedenti e altre cose del genere.
+	</p>
+	<p>Per applicare una patch generata con <span class="comando">format-patch</span>, si userà <span class="comando">git am</span>. Tecnicamente <span class="comando">git am</span> è fatto per leggere un file <q>mbox</q>, che è un file piatto di puro testo per memorizzare uno o più messaggi email in un solo file. Assomiglia a questo:
+	</p>
+	<pre>
+<span class="nota">From 330090432754092d704da8e76ca5c05c198e71a8 Mon Sep 17 00:00:00 2001
+From: Jessica Smith &lt;jessica@example.com&gt;
+Date: Sun, 6 Apr 2008 10:17:23 -0700
+Subject: [PATCH 1/2] add limit to log function
+
+Limit log functionality to the first 20	</span>	
+</pre>
+	<p>Questo è l'inizio dell'output del comando <span class="comando">format-patch</span> che abbiamo visto nella sezione precedente, ma è anche un formato valido per <q>mbox</q> per le email. <br />
+Se qualcuno ha inviato la patch usando <span class="comando">git send-email</span> e l'abbiamo scaricata nel formato <q>mbox</q>, allora possiamo selezionare il file mbox in <span class="comando">git am</span> che inizierà ad applicare tutte le patch che troviamo. <br />
+Se si ha un client di posta elettronica che ci permette di salvare più messaggi in un file mbox allora possiamo salvare tutta una serie di patch in un singolo file e usare 'git am' per applicarle tutte assieme.
+	</p>
+
+	<p>Se invece qualcuno ha caricato una patch generata con <span class="comando">format-patch</span> su un sistema di ticket e tracciamento, possiamo salvare localmente il file e passarlo a <span class="comando">git am</span> perché lo applichi:
+	</p>
+	<pre>git am 0001-limit-log-function.patch</pre>
+
+	<p>Si può vedere che ha applicato senza errori le modifiche e ha creato automaticamente una nuova commit per il progetto. Le informazioni sull'autore e la data della commit vengono prese dalle intestazioni <q>From</q> e <q>Date</q> dell'email, mentre il messaggio della commit è preso dal <q>Subject</q> e dal corpo dell'email che precede la patch. <br />
+Se questa patch fosse stata applicata dall'esempio dell'mbox appena mostrato, la commit generata apparirebbe così:
+	</p>
+	<pre>git log --pretty=fuller -1</pre>
+
+	<p>un esempio di output:</p>
+	<pre>
+<span class="nota">commit 6c5e70b984a60b3cecd395edd5b48a7575bf58e0
+Author:     Jessica Smith &lt;&gt;
+AuthorDate: Sun Apr 6 10:17:23 2008 -0700
+Commit:     Scott Chacon &lt;schacon@gmail.com&gt;
+CommitDate: Thu Apr 9 09:19:06 2009 -0700
+
+   add limit to log function
+
+   Limit log functionality to the first 20		</span>
+</pre>
+	<p><span class="nota">Commit</span> indica chi ha applicato la patch e <span class="nota">CommitDate</span> quando. <span class="nota">Author</span> chi ha creato la patch originariamente e quando.</p>
+
+	<p>Ma è possibile che la patch non sia applicabile correttamente. Il proprio branch principale potrebbe essere cambiato troppo rispetto al branch da cui deriva la patch o che la patch dipenda da altre che non hai ancora applicato. In questo caso il processo di <span class="comando">git am</span> fallirà e darà errore e  ci chiederà cosa si vuole fare. <br />
+Inoltre questo comando aggiunge dei marcatori di conflitto in ciascun file che presenti un problema, similmente a quanto avviene nelle operazioni di <span class="comando">merge</span> o <span class="comando">rebase</span>. E allora bisognerà risolvere il problema allo stesso modo: modificare il file per risolvere il conflitto, metterlo nello stage ed eseguire <span class="comando">git am --resolved</span> per continuare con la patch successiva:
+	</p>
+	<pre>
+  (fix the file)
+git add ticgit.gemspec
+git am --resolved
+</pre>
+
+	<p>Se si sta applicando una serie di patch da un file <q>mbox</q> si può eseguire il comando <span class="comando">git am</span> anche in modalità interattiva, che si ferma ogni volta che incontra una patch per chiederci se vogliamo applicarla:
+	</p>
+	<pre>git am -3 -i mbox</pre>
+	<p>Quando tutte la patch per l'orgomento sono state applicate e committate nel proprio branch, toccherà a noi decidere se e come integrarle in un branch principale.
+	</p>
+
+</section>
+
+<section id="s8">
+	<h2>Scaricare branch remoti</h2>
+	<p>Se la contribuzione viene da un utente Git che ha un proprio repository su cui ha pubblicato una serie di modifiche e ti ha mandato l'indirizzo del repository e il nome del branch remoto in cui sono le stesse, si può aggiungerlo come remoto e unirle localmente.
+	</p>
+	<p>Se, per esempio, Jessica ci ha inviato un'email dicendoci che nel branch <span class="nota">ruby-client</span> del suo repository ha sviluppato un'interessante funzionalità, la possiamo testare aggiungendo il branch remoto e scaricarlo come uno localmente:
+	</p>
+	<pre>
+git remote add jessica git://github.com/jessica/myproject.git
+git fetch jessica
+git checkout -b rubyclient jessica/ruby-client
+</pre>
+
+	<p>Se successivamente ci invia un'altra email con un altro branch che contenga un'altra funzionalità interessante la possiamo scaricare più velocemente perché abbiamo già configurato il repository remoto.
+	</p>
+	<p>Questa configurazione è molto utile se si lavori molto con una persona. In caso contrario, se qualcuno produce una sola patch di tanto in tanto può essere più rapido accettarle per email, invece di chiedere a tutti di avere un proprio server pubblico.
+	</p>
+	<p>Se non si lavora spesso con una persona ma si vuole comunque prendere le modifiche in questo modo si può sempre passare l'URL del repository remoto al comando <span class="comando">git pull</span>. Questo farà una pull una tantum senza salvare l'URL come un riferimento remoto:
+	</p>
+	<pre>git pull git://github.com/onetimeguy/project.git</pre>
+</section>
+
+<section id="s9">
+	<h2>Determinare cos'è stato introdotto</h2>
+	<p>Abbiamo un branch che contiene il lavoro di un contributore. A questo punto dobbiamo decidere cosa farne. </p>
+	<p>Spesso è utile revisionare le commit del branch che non sono ancora nel nostro master. Possiamo escludere le commit di un branch aggiungendo l'opzione <span class="comando">--not</span> prima del nome del branch. Se un nostro contributore ci manda due patch e creiamo un branch chiamato <span class="nota">contrib</span> dove applichiamo le patch, possiamo eseguire:
+	</p>
+	<pre>git log contrib --not master</pre>
+	<p>esempio di output:</p>
+	<pre>
+<span class="nota">commit 5b6235bd297351589efc4d73316f0a68d484f118
+Author: Scott Chacon &lt;schacon@gmail.com&gt;
+Date:   Fri Oct 24 09:53:59 2008 -0700
+
+    seeing if this helps the gem
+
+commit 7482e0d16d04bea79d0dba8988cc78df655f16a0
+Author: Scott Chacon &lt;schacon@gmail.com&gt;
+Date:   Mon Oct 22 19:38:36 2008 -0700
+
+    updated the gemspec to hopefully work better		</span>
+</pre>
+	<p>Possiamo passare l'opzione '<span class="comando">-p</span> per vedere le modifiche di ciascuna commit, così che all'output aggiungerà le differenze introdotte da ciascuna commit.
+	</p>
+	<p>Per vedere tutte le differenze che verrebbero applicate se si unisse il branch attuale con un altro si dovrà usare un trucchetto per vedere il risultato corretto. Si potrebbe usare:
+	</p>
+	<pre>git diff master</pre>
+	<p>Quello che si vuole realmente vedere sono le modifiche aggiunte nel branch: il lavoro che effettivamente otterremo se le unissimo al master. Possiamo ottenerlo facendo si che Git confronti l'ultima commit del branch col primo antenato comune con il branch master. 
+	</p>
+	<p>Tecnicamente lo possiamo farlo noi scoprendo l'antenato comune ed eseguendo quindi la <span class="comando">diff</span>:</p>
+	<pre>
+git merge-base contrib master
+<span class="nota">  36c7dba2c95e6bbb78dfa822519ecfec6e1ca649		</span>
+git diff 36c7db
+</pre>
+	<p>Questo però è scomodo e Git fornisce un modo più veloce per farlo: <span class="nota">i tre punti</span>. Nel contesto del comando <span class="comando">diff</span>, si possono usare tre punti dopo il nome di un branch per eseguire una <span class="comando">diff</span> tra l'ultima commit del branch in cui si è e l'antenato comune con un altro branch:
+	</p>
+	<pre>git diff master...contrib</pre>
+	<p>Questo comando ci mostrerà solo le modifiche introdotte dal branch attuale a partire dall'antenato comune con master. Questa sintassi è molto utile da ricordare.
+	</p>
+
+</section>
+
+<section id="s10">
+	<h2>Integrare il lavoro dei contributori</h2>
+
+	<p> <a href="http://git-scm.com/book/it/v1/Git-distribuito-Mantenere-un-Progetto">Vedere qui</a>  </p>	
+
+</section>
 
 
-<section>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-</section>
+
 <section>
 </section>
 
