@@ -51,6 +51,10 @@
 			<option value="s13">Limitare l'output delo log</option>
 			<option value="s14">Filtrare i risultati in base a data e ora</option>
 			<option value="s15">Recuperare una sola commit con 'show'</option>
+			<option value="s15A">Il registro dei riferimenti</option>
+			<option value="s15B">Riferimenti ancestrali</option>
+			<option value="s15C">Intervalli di commit</option>
+			
 			<option value="s16">Usare una GUI per visualizzare la cronologia</option>
 		</optgroup>
 		<optgroup label="Annullare qualcosa">
@@ -165,7 +169,7 @@ doc/**/*.txt		<span class="nota">ignora tutti i file .txt nella directory doc/</
 
 <section id="s7">
 	<h2>Visualizzare le modifiche</h2>
-	<p>Il comando <span class="comando">git status</span> mostra solo i nomi dei file modificati mentre se si vuole vedere le modifiche apportate ai file si può usare </p>
+	<p>Il comando <span class="comando">git status</span> mostra solo i nomi dei file modificati mentre se si vuole vedere le modifiche apportate ai file si può usare il comando <span class="comando">git diff</span>:</p>
 	<pre>git diff</pre>
 	<p>Questo comando confronta cosa c'è nella tua directory di lavoro con quello che c'è nella tua area di stage. Il risultato mostra le modifiche effettuate che ancora non sono state messe nello stage. Se tutte le modifiche sono state messe nello stage, <span class="comando">git diff</span> non mostrereà nulla.
 	</p>
@@ -408,7 +412,7 @@ Inoltre Le opzioni <span class="comando">oneline</span> e <span class="comando">
 </section>
 
 <section id="s13">
-	<h2>Limitare l'output delo log</h2>
+	<h2>Limitare l'output del log</h2>
 	<p>Il metodo più semplice per restringere il  numero delle commit è quello di aggiungere un numero (come visto sopra)</p>
 	<pre>git log -2</pre>
 	<p>restituisce solo le ultime due commit</p>
@@ -501,7 +505,7 @@ Questo comando funziona con molti formati. Si può specificare una data (<span c
 
 <section id="s15">
 	<h2>Recuperare una sola commit con <span class="comando">show</span></h2>
-	<p>Se si volesse rilevare e visualizzare una sola specifica commit, invece di doverle scorrere, si potrebbe usare l'opzione <span class="comando">show</span> seguita dall'hash della commit desiderata. Ovviamente bisogna prima recuperare l'hash di riferimento e nel caso il miglior comando da utilizzare potrebbe essere <span class="comando">--pretty</span> seguito dalle opzioni <span class="comando">oneline</span> oppure <span class="comando">format</span>:
+	<p>Se si volesse rilevare e visualizzare una sola specifica commit (con tutte le informazioni relative), invece di doverle scorrere, si potrebbe usare l'opzione <span class="comando">show</span> seguita dall'hash della commit desiderata. Ovviamente bisogna prima recuperare l'hash di riferimento e nel caso il miglior comando da utilizzare potrebbe essere <span class="comando">--pretty</span> seguito dalle opzioni <span class="comando">oneline</span> oppure <span class="comando">format</span>:
 	</p>
 	<pre>
 git log --pretty=oneline	
@@ -513,6 +517,142 @@ git log --pretty=format:"%H - %an, %ar : %s"
 
 	<p>Si potrebbe ottenere il risultato anche passando parte dell'hash:</p>
 	<pre>git show  d679ee</pre>
+
+	<p>In ogni caso con <span class="comando">show</span> è possibile ottenere: </p>
+	<pre>
+git show			<span class="nota">mostra l'ultima commit (completa di informazioni)</span>
+git show master			<span class="nota">mostra l'ultima commit di 'master' (completa di informazioni)</span>
+git rev-parse master		<span class="nota">mostra la prima commit di 'master' (ma solo l'hash SHA-1)</span>
+</pre>
+</section>
+
+<section id="s15A">
+	<h2>Il registro dei riferimenti (reflog)</h2>
+	<p>Una delle cose che Git fa dietro le quinte è aggiornare il registro dei riferimenti (<q>reflog</q> in inglese), che registra la posizione dei riferimenti HEAD e delle diramazioni su cui si è lavorato negli ulti mesi. <br />
+Per consultare il registro dei riferimenti si usa il comando <span class="comando">git reflog</span>:</p>
+	<pre>git reflog</pre>
+	<p>un esempio di output è il seguente:</p>
+	<pre>
+f0b1583 HEAD@{0}: commit: Modificati git2 e git 4
+cc0e4dd HEAD@{1}: merge origin/master: Merge made by the 'recursive' strategy.
+00e68c0 HEAD@{2}: commit: Modifiche riguardanti 'git add' e di usare Vim come editor predefinito
+af2f1ae HEAD@{3}: commit: Aggiunto info sul comando "git add ."
+...
+fab038f HEAD@{16}: commit (initial): Versione iniziale di Git Tutorial
+</pre>
+	<p>Ogni volta che una diramazione viene aggiornata per qualsiasi ragione, Git memorizza questa informazione in questa cronologia temporanea. E si può anche specificare commit più vecchie. <br />
+Se si vuole vedere la cronologia a partire dalla quintultima commit a partire dalla HEAD del repository, si può usare il riferimento <span class="comando">@{n}</span> che si vede nel output del registro:
+	</p>
+	<pre>git show HEAD@{5}</pre>
+	<p>Per vedere le informazioni del registro formattate come l'output di git log, si può eseguire il comando <span class="comando">git log</span> con l'opzione <span class="comando">-g</span>:
+	</p>
+	<pre>git lo -g</pre>
+		
+	<p class="nota">E' importante notare che l'informazione del registro è solamente locale: è un registro di ciò fatto nel proprio repository. I riferimenti non saranno uguali sui cloni degli altri.</p>
+
+</section>
+
+<section id="s15B">
+	<h2>Riferimenti ancestrali</h2>
+	<p>L'altro modo principale per specificare una commit è attraverso i suoi ascendenti. Mettendo una <span class="comando">^</span> alla fine di un riferimento, Git lo risolve interpretandolo come il padre padre di quella determinata commit. 
+Proviamo a vedere la cronologia del nostro progetto con:</p>
+	<pre>git log --pretty=format:'%h %s' --graph</pre>
+	<p>una esempio di output potrebbe essere il seguente:</p>
+	<pre>
+<span class="nota">* f0b1583 Modificati git2 e git 4 'git2':  modifica nella sezione 7 'git4': completamento  pagina
+*   cc0e4dd Merge remote-tracking branch 'origin/master' Fusione col server
+|\  
+| * 6e92ec2 Eliminato mike e aggiunto jon
+* | 00e68c0 Modifiche riguardanti 'git add' e di usare Vim come editor predefinito
+* | af2f1ae Aggiunto info sul comando "git add ." Il comando aggiunge tutti i file della directory compreso di sub directory
+|/  
+* 92942c7 Creato "git4" file sulla partecipazione ai progetti git
+* 5df9b0d Modificati i file Master, git1-3-3 Le modifiche apportate a tutti e 4 riguardano in particolare l'elemento <ul> Inoltre sono state eseguite 
+* 541fd23 Modifica  sezione 22:Aggiunta di repo su githu
+* ac25741 Corretto README.md e creato il file .gitignore
+* f58ce73 Aggiunta del file "README.md"
+* 212c6d7 Corretto errore di un collegamento alla  sezione 23
+* fab038f Versione iniziale di Git Tutorial			</span>
+</pre>	
+	<p>Ora dando <span class="comando">git show HEAD^</span> notiamo che ci vengono restituiti soltanto gli ascendenti, qualora ci siano): </p>
+	<pre>
+git show HEAD^
+<span class="nota">commit cc0e4ddd3b631456caa3cfa77e15659b8d6bad5a
+Merge: 00e68c0 6e92ec2
+Author: MikePap &lt;1208mike@gmail.com&gt;
+Date:   Mon May 4 09:44:56 2015 +0200
+
+    Merge remote-tracking branch 'origin/master'
+    Fusione col server			</span>
+</pre>
+	<p>come si può vedere dall'output: <span class="nota">commit</span> fa riferimento alla commit risultante e <span class="nota">Merge</span> alle commit che hanno generato la commit risultante. <br />
+<span class="nota">La commit <b>6e92ec2 - Eliminato mike e aggiunto jon</b> è stata eseguita sul portatile </span>
+ </p>
+
+	<p>Un altro modo di specificare un riferimento ancestrale è la <span class="comando">~</span>. Questo si riferisce anche al primo ascendente, quindi <span class="comando">HEAD~</span> e <span class="comando">HEAD^</span> sono equivalenti. La differenza diventa evidente quando si specifica un numero. <span class="comando">HEAD~2</span> significa "il primo ascendente del primo ascendente", o "il nonno”: attraversa i primi ascendenti il numero di volte specificato. Nell'esempio di sopra, avremo che:
+	</p>
+	<pre>
+git show HEAD~1			<span class="nota">commit: cc0e4dd </span>
+git show HEAD~2			<span class="nota">commit: 00e68c0 </span>
+git show HEAD~3			<span class="nota">commit: af2f1ae </span>
+</pre>	
+
+</section>
+
+<section id="s15C">
+	<h2>Intervalli di commit</h2>
+	<p>Quando si hanno molti rami può essere utile sapere cosa si ha in un determinato ramo che non è stato ancora incorporato. Per farlo ci sono diversi metodi. <br />
+Per gli esempi poniamo di avere due rami: <span class="nota">master e experiment</span> come in questo caso:
+	</p>
+	<pre>
+A -- B -- E -- F &lt;-- master
+          C -- D &lt;-- experiment
+</pre>
+	<p>dove le commit A e B sono comuni</p>
+	
+	<h3>Metodo dei due punti</h3>
+	<p>Dall'esempio di sopra per vedere tutte le commit raggiungibili da <span class="nota">experiment</span> che non lo siano da <span class="nota">master</span></p>
+	<pre>git log master..experiment</pre>
+	<p>L'output sarà:</p>
+	<pre>
+<span class="nota">D
+C		</span>
+</pre>
+	
+	<p>Se vogliamo invece vedere il contrario, ovvero tutte le commit in <span class="nota">master</span> che non siano in <span class="nota">experiment</span>:</p>
+	<pre>
+git log experiment..master
+<span class="nota">
+F
+E		</span>
+</pre>
+
+	<p>Un'altro caso in cui si usa spesso questa sintassi è quando si sta per condividere delle commit verso un repository remoto:</p>
+	<pre>git log origin/master..HEAD</pre>
+	<p>Questo comando mostra tutte le commit della propria diramazione che non sono in quella <span class="nota">master</span> del proprio repository remoto <span class="nota">origin</span>. Se si esegue <span class="comando">git push</span> quando la diramazione attuale è associata a <span class="nota">origin/master</span>, le commit elencate da <span class="comando">git log origin/master..HEAD</span> saranno quelle che saranno inviate al server. <br />Per esempio si può ottenere lo stesso risultato dell'esempio precedente scrivendo <span class="comando">git log origin/master..</span>. Git sostituisce la parte mancante con HEAD.
+	</p>
+
+	<h3>Metodo dei tre punti</h3>
+	<p>Il metodo dei tre punti permette di vedere cosa ci sia nel <span class="nota">master</span> e in <span class="nota">experiment</span> ma non i riferimenti comuni: 
+	</p>
+	<pre>git log master...experiment
+<span class="nota">
+F
+E
+D
+C
+</pre>
+
+	<h3>Metodo con ^ e --not</h3>
+	<p>Sono dei metodi che ritornano utili quando si hanno più rami. <br />
+Se per esempio vogliamo vedere tutte le commit che siano raggiungibili da <span class="nota">refA</span> o da <span class="nota">refB</span> ma non da <span class="nota">refC</span> possiamo usare una delle seguenti alternative:
+	</p>
+	<pre>
+git log refA refB ^refC
+git log refA refB --not refC
+</pre>
+
+
 </section>
 
 <section id="s16">
