@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<title>Strumenti di Git</title>
+<link rel="stylesheet" href="CSS/git.css" type="text/css"/>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+
+<div class="uelleCapitoli" >
+	<ul class="capitoliGit">
+		<li><a href="Master.html">Master Git Tutorial</a> </li>
+		<li><a href="git1.html">cap.1 - In generale</a></li>
+		<li><a href="git2.html">cap.2 - Basi di Git</a></li>
+		<li><a href="git3.html">cap.3 - Diramazioni</a></li>
+		<li><a href="git4.html">cap.4 - Partecipazione Progetti</a></li>
+		<li><a href="git6.html">cap.6 - </a> </li>
+		<li><a href="git7.html">cap.7 - </a> </li>
+	</ul>
+</div>
+
+<article>
+	<div class="numCapitolo"> <span class="spanNC">cap. 5</span></div> 
+
+				<h1>Strumenti di Git</h1>
+
+<section class="listaArgomenti">
+	Argomenti
+	<select name="sezioni" class="sezioni">
+		<optgroup label="Accantonare">
+			<option value="s1">Accantonare il proprio lavoro</option>
+			<option value="s2">Eliminare gli accantonamenti</option>
+			<option value="s3">Annullare e riprendere una modifica accantonata</option>
+			<option value="s4">Diramazione da un accantonamento</option>
+		</optgroup>
+		<optgroup label="Riscrivere la storia">
+			<option value="s5">Cambiare l'ultima commit</option>
+			<option value="s6">Cambiare una specificata commit</option>
+			<option value="s7">Eliminare e riordinare le commit</option>
+			<option value="s8">Combinazione di commit</option>
+			<option value="s9">L'opzione nucleare: filter-branch</option>
+		</optgroup>	
+		<optgroup label="Debugging">
+			<option value="s10">Annotazioni di file</option>
+			<option value="s11">Ricerca dei bug</option>
+		</optgroup>				
+		<optgroup label="Moduli">
+			<option value="s12">Lavorare coi moduli</option>
+		</optgroup>
+	</select>
+
+
+</section>
+
+<section id="s1">
+	<h2>Accantonare il proprio lavoro</h2>
+	<p>Potrà capitare che mentre si sta lavorando ad un lavoro lo si debba lasciare per passare ad un'altro lavoro. In questo caso c'è la possibilità di accantonare il lavoro fatto per riprenderlo in un secondo momento usando il comando <span class="comando">git stash</span>. 
+<br /> Supponendo di aver modificato un paio di file diamo:	
+	</p>
+	<pre>git stash</pre>
+	<p>se ora diamo <span class="comando">git status</span> vedremo che Git ha ripulito la directory di lavoro comunicandoci che non c'è niente da committare. I file modificati, nella directory di lavoro, sono stati portati allo stato precedente.  
+	</p>
+	
+	<p>Potremmo ripetere la cosa lavorando su altri file e accantonando i lavori. I vari accantonamenti saranno registrati a parte in serie;  infatti li possiamo visualizzare con il comando <span class="comando">git stash list</span>
+	</p>
+	<pre>git stash list</pre>
+	<p>potremmo vedere qualcosa del genere:</p>
+	<pre>
+stash@{0}: WIP on esperimento: 7e16a5c Modificato 'rape' per provare la rimozione dell'accantonamento
+stash@{1}: WIP on master: b49591a Modifica pera per provare l'amend cati pisello e pera
+stash@{2}: WIP on master: 54e6e69 Modificato pera per provare il 'format-patch'
+</pre>
+	<p>Da ricordare che l'ultimo accantonamento eseguito è posto in cima e avrà come numero lo zero (<b>stash@{0}</b>). </p>
+
+	<p>Volendo avere più informazioni rispetto a quelle avute con <span class="comando">list</span> possiamo utilizzare il comando <span class="comando">show</span>  </p>
+	<pre>
+git stash show		<span class="nota">restituisce il nome del file dell'ultimo accantonamento</span>
+git stash show -p 	<span class="nota">restituisce anche le modifiche effettuate sul file</span>
+git stash show stash{1}	<span class="nota">restituisce il nome del file del penultimo accantonamento</span>
+</pre>
+
+	<p>
+Quando avremo deciso di voler riprendere un lavoro accantonato per poterlo committare potremo farlo col comando <span class="comando">git stash apply</span> che riprende l'ultimo accantonamento. Mentre per riprendere uno specifico accantonamento dovremmo dare <span class="comando">git stash apply stash@{n}</span> dove la 'n' è il numero dell'accantonamento  
+	</p>
+	<pre>
+git stash apply				<span class="nota">riprende l'ultimo accantonamento</span>
+git stash apply stash@{2]		<span class="nota">riprende il secondo accantonamento</span>
+</pre>
+	<p>Le modifiche vedrranno riapplicate ai file, ma quello che si aveva assemblato ora non lo sono più.</p>
+
+</section>
+
+<section id="s2">
+	<h2>Eliminare gli accantonamenti</h2>
+
+	<p>Per cancellare un accantonamento bisogna eseguire <span class="comando">git stash drop</span> con il nome dell'accantonamento da rimuovere. Si può eseguire anche <span class="comando">git stash pop</span> per applicare l'accantonamento e cancellare immediatamente dopo.
+	</p>
+	<pre>
+$ git stash list
+<span class="nota">
+stash@{0}: WIP on master: 049d078 added the index file
+stash@{1}: WIP on master: c264051 Revert "added file_size"
+stash@{2}: WIP on master: 21d80a5 added number to log </span>
+
+$ git stash drop stash@{0}
+<span class="nota">
+stash@{0} eliminata (049d078hkjkfd8dgfd878fg78d)		</span>
+</pre>
+
+	<p>Per eliminare tutti gli accantonamenti e ripulire il registro dovremmo dare il comando <span class="comando">git stash clear</span> </p>
+	<pre>git stash clear			<span class="nota">elimina tutti gli accantonamenti</span>	</pre>	
+
+</section>
+
+
+
+<section id="s3">
+	<h2>Annullare e riprendere una modifica accantonata</h2>
+	<p>Il comando per poter annullare una modifica di accantonamento è un pò complesso ed è il seguente:</p>
+	<pre>git stash show -p | git apply -R</pre>
+
+	<p>Se ora andiamo a dare <span class="comando">git status</span> Git ci dirà che la directory è vuota e non c'è niente da committare ma ciò non toglie che se ridiamo <span class="comando">git stash apply</span> potremmo ritornare a riprendere le modifiche fatte</p>
+
+</section>
+
+<section id="s4">
+	<h2>Creare una diramazione da un accantonamento</h2>
+	<p>Se si accantona del lavoro e lo si lascia lì mentre si continua a lavorare per un po' nella diramazione da cui abbiamo creato l'accantonamento, potremmo avere dei problemi a riapplicarlo. Se l'applicazione prova a modificare un file che avevamo modificato successivamente, otterremo un conflitto d'incorporazione che dovremo risolvere. <br />
+Un modo facile per ritestare le modifiche accantonate, è eseguire il comando <span class="comando">git stash branch</span>, che crea una diramazione, scarica la commit dov'eravamo quando abbiamo accantonato il lavoro, lo riapplica e, se ci riesce senza problemi, cancella l'accantonamento:
+	</p>
+	<pre>git stash branch testchanges</pre>
+	<p>Questa è una bella accorciatoioa per recuperare il lavoro accantonato e lavorarci in una nuova diramazione.</p>
+
+</section>
+
+
+<section id="s5">
+	<h2>Cambiare l'ultima commit</h2>
+	<p>Dover cambiare l'ultima commit è una cosa che può capitare spesso e l'abbiamo vista nel capitolo 2: <a href="http://localhost/GitTutorial/git2.html#s17">Vedere qui</a>. <br />
+Ad ogni modo per cambiare il testo di un messaggio o per aggiungere qualcosa che si scordato di aggiungere si utilizza il comando <span class="comando">amend</span>  
+</p>
+
+</section>
+
+
+<section id="s6">
+	<h2>Cambiare una specificata commit</h2>
+	<p>Per cambiare una commit specifica (che non sia l'ultima, come visto sopra) bisogna usare lo strumento <span class="comando">rebase</span> con l'aggiunta di una opzione, <span class="comando">HEAD~n</span> che gli indichi di quanto si vuole andare indietro   
+	</p>
+	<pre>git rebase -i HEAD~3</pre>
+	<p>Dato il comando, Git aprirà l'editor predefinito e mostrerà qualcosa del genere:</p>	
+	<pre>
+<span class="nota">pick f7f3f6d changed my name a bit
+pick 310154e updated README formatting and added blame
+pick a5f4a0d added cat-file 		</span>
+</pre>
+	<p>da ricordarsi che l'ordine è inverso rispetto, ad esempio, al comando <span class="comando">git log</span>. <br /> 
+A questo punto bisogna rimpiazzare la parola <span class="nota">edit</span> al posto di <span class="nota">pick</span> in corrispondenza della commit che si vuol modificare:
+	</p>
+	<pre><span class="nota">edit 310154e updated README formatting and added blame</span></pre>
+	<p>dopo aver salvato e chiuso l'editor bisogna dare altri due comandi per completare l'operazione: <span class="comando">git commit --amend</span> e <span class="comando">git rebase --continue</span> </p>
+	<pre>git commit --amend</pre>
+	<p>dopo aver dato <span class="comando">amend</span> si riaprirà l'editor e potremo modificare il testo del messaggio. <br />
+Infine, dopo aver salvato e chiuso l'editor, dovremo dare l'ultimo input col comando per terminare il <span class="comando">rebase</span> 
+	</p>
+	<pre>git rebase --continue</pre>
+
+</section>
+
+<section id="s7">
+	<h2>Eliminare e riordinare le commit</h2>
+	<p>Utilizzando lo strumento <span class="comando">rebase</span> visto sopra possiamo anche rimuovere o riordinare l'ordine delle commit; quindi dopo aver dato il comando <span class="comando">git rebase -i HEAD~3</span> e aver avuto il seguente output (come l'esempio precedente)
+	</p>
+	<pre>
+<span class="nota">pick f7f3f6d changed my name a bit
+pick 310154e updated README formatting and added blame
+pick a5f4a0d added cat-file 		</span>
+</pre>
+	<p>eseguiamo le modifiche desiderate all'interno dell'editor, eliminando una commit ed cambiando l'ordine, in questo modo:</p>
+	<pre>
+<span class="nota">pick 310154e updated README formatting and added blame
+pick f7f3f6d changed my name a bit	</span>
+</pre>
+	<p>fatte le modifiche non ci rimane che salvare e chiudere l'editor</p>
+
+</section>
+
+<section id="s8">
+	<h2>Combinazione di commit</h2>
+	<p>Sempre con l'utilizzo dello strumento <span class="comando">rebase</span> visto nelle due sezioni precedenti possiamo combinare più commit per ottenerne una.  
+	</p>
+	<p>Pertanto dopo aver dato il nostro <span class="comando">git rebase -i HEAD~3</span>, che ci mostra le prime tre commit: </p>
+	<pre>
+<span class="nota">pick f7f3f6d changed my name a bit
+squash 310154e updated README formatting and added blame
+squash a5f4a0d added cat-fil		</span>
+</pre>
+	<p>rimpiazziamo <span class="nota">pick</span> con <span class="nota">squash</span> in due commit. Dopo aver salvato e uscito dall'editor Git farà si che queste due commit più quella precedente a loro (in questo caso la prima: f7f3f6d) saranno unite in una unica commit. Git riaprirà nuovamente l'editor per mostrarci i tre messaggi che avevamo originato per ciascuna commit e permetterci, eventualmente, di modificarli per creare un nuovo ed unico messaggio.
+	</p>
+
+</section>
+
+<section id="s9" >
+	<h2>L'opzione nucleare: filter-branch  </h2>
+	<p>Git mette a disposizione un comando molto potente che permette di riscrivere un gran numero di commit. Può capitare, per esempio, che si voglia rimuovere un file da ogni commit oppure cambiare il proprio indirizzo email. Queste operazioni si possono eseguire grazie al comando <span class="comando">filter-branch</span> il quale per eseguire il suo compito non fa altro che riscrivere le commit. 
+	</p>	
+
+	<h3>Rimozione di un file da ogni commit</h3>
+	<p>A volte può accadere, specialmente quando si usa il comando <span class="comando">git add .</span>,  di aggiungere qualche file che contiene delle password (<q>personal-pass.txt</q>) che non si vogliono mostrare pubblicamente. Quando ce ne rendiamo conto della pericolosa distrazione per rimediare alla meglio dobbiamo fare in modo di eliminare il file da tutte le commit eventualmente eseguite e per fare ciò diamo:
+	</p>
+	<pre>git filter-branch --tree-filter 'rm -f personal-pass.txt' HEAD</pre>	
+	<p>Nel caso specifico le commit riscritte saranno quelle eseguite dopo l'immissione del file non in questione  </p>
+
+	<p>E' possibile inoltre, utilizzando lo stesso comando, rimuovere i file di backup, quelli originati automaticamente, in questo modo:	
+	</p>
+	<pre>git filter-branch --tree-filter "rm -f *~" HEAD</pre>
+	<p>per evitarli è comunque consigliabile inserire la regola appropriata nel file <q>.gitignore</q> come visto nel capitolo 2: <a href="http://localhost/GitTutorial/git2.html#s6">Ignorare i file</a>
+	</p>
+
+	<h3>Canbiare l'indirizzo e-mail </h3>
+	<p>Può esserci il caso che si voglia cambiare l'indirizzo e-mail per un progetto senza cambiare quello definito nella regola <span class="comando">git config</span>:
+	</p>
+	<pre>
+git filter-branch --commit-filter '
+	if [ "$GIT_AUTHOR_EMAIL" = "schacon@localhost" ];
+	then
+		GIT_AUTHOR_NAME="Scott Chacon";
+		GIT_AUTHOR_EMAIL="schacon@example.com";
+		git commit-tree "$@";
+	else
+		git commit-tree "$@";
+	fi' HEAD
+</pre>
+	<p>Se abbiamo configurato in <span class="comando">config</span>: </p>
+	<pre>git config --global user.email "schacon@localhost"</pre>
+	<p>Il comando cambierà l'indirizzo e-mail in <q>schacon@example.com</q> nella cronologia delle commit del nostro progetto </p>
+
+
+</section>
+
+<section id="s10">
+	<h2>Annotazioni di file</h2>
+	<p>Git fornisce degli strumenti molto utili nel caso si voglia rintracciare un bug all'interno di un file o comunque controllare una qualsiasi parte di file. Il comando che ci permette quest'analisi è <span class="comando">git blame</span> 
+	</p>
+	<pre>git blame -L 12,22 simplegit.rb</pre>
+	<p>L'opzione <span class="comando">-L</span> seguita dalla coppia di numeri indica la limitazione nella ricerca dalla riga 12 alla 22 del file <q>simplegit.rb</q>. <br />
+Una esempio di output potrebbe essere il seguente: 
+	</p>
+	<pre>
+<span class="nota">^4832fe2 (Scott Chacon  2008-03-15 10:31:28 -0700 12)  def show(tree = 'master')
+^4832fe2 (Scott Chacon  2008-03-15 10:31:28 -0700 13)   command("git show #{tree}")
+^4832fe2 (Scott Chacon  2008-03-15 10:31:28 -0700 14)  end
+^4832fe2 (Scott Chacon  2008-03-15 10:31:28 -0700 15)
+9f6560e4 (Scott Chacon  2008-03-17 21:52:20 -0700 16)  def log(tree = 'master')
+79eaf55d (Scott Chacon  2008-04-06 10:15:08 -0700 17)   command("git log #{tree}")
+9f6560e4 (Scott Chacon  2008-03-17 21:52:20 -0700 18)  end
+9f6560e4 (Scott Chacon  2008-03-17 21:52:20 -0700 19)
+42cf2861 (Magnus Chacon 2008-04-13 10:45:01 -0700 20)  def blame(path)			</span>
+</pre>
+
+	<p>
+Osservando l'output notiamo che il primo campo riporta l'hash della commit in cui c'è stata l'ultima modifica di quella linea. I due successivi campi, fra le parentesi tonde, riportano il nome dell'autore che ha modificato quella riga e quando è avvenuta. Dopodichè è riportato il contenuto della riga; <br />
+Da notare il carattere <span class="nota">^</span> a inizio riga, sta ad indicare che quella riga è quella originaria nel senso che c'era alla creazione del file e non è stata modificata.
+	</p>
+
+</section>
+
+<section id="s11">
+	<h2>Ricerca dei bug</h2>
+	<p>Le annotazioni dei file, visto sopra, può servire quando si sa quando il problema è apparso la prima volta; ma quando si sono fatte numerose commit dopo, senza sapere che ci fosse tale problema, bisognerà risalire alla commit in cui il problema si è presentato la prima volta. In questo caso ci viene utile il comando <span class="comando">git bisect</span>. 
+	</p>
+	<p>
+Vediamo come funziona. Poniamo il caso che abbiamo ricevuto una comunicazione di un bug ma non riusciamo a capire dove e come si sia originato. Allora incominciamo col dare il seguente comando:	
+	</p>
+	<pre>git bisect start</pre>
+	<p>questo è l'inizializzazione del processo a cui si deve proseguire, indicando a Git che la commit in cui si è al momento ha dei problemi, col seguente comando:
+	</p>
+	<pre>git bisect bad</pre>
+	<p>a questo punto dobbiamo, per forza di cose, dire a Git quale è stata l'ultima commit fino a che le cose sono andate bene col comando <span class="comando">git bisect good [good_commit]</span> passandogli come "good_commit" il nome dell'etichetta:
+  </p>
+	<pre>git bisect good v1.0</pre>
+	<p>un esempio di output</p>
+	<pre>
+<span class="nota">Bisecting: 6 revisions left to test after this
+[ecb6e1bc347ccecc5f9350d878ce677feb13d3b2] error handling on repo		</span>
+</pre>
+
+	<p>dal seguente output di esempio Git ci indica la sesta (quella di mezzo) tra le 12 che intercorrono tra la buona indicata da noi (v1.0) e la corrente. A questo punto si può fare un controllo su questa commit per vedere se il problema c'è o meno. <br />
+Poniamo il caso che il problema non sia ancora presente e quindi dobbiamo comunicarlo a Git; lo facciamo così:
+</p>
+	<pre>git bisect good</pre>
+	<p>con <span class="comando">good</span>  vogliamo dire a Git di proseguire perchè fino alla commit di mezzo, che ci hai restituito, va ancora tutto bene e quindi il problema si sarà sicuramente originato dopo. <br />
+Git va avanti e ci restituisce la commit di mezzo tra le sei rimanenti che intercorrono tra quella controllata e l'ultima	
+	</p>
+	<pre>
+<span class="nota">Bisecting: 3 revisions left to test after this
+[b047b02ea83310a70fd603dc8cd7a6cd13d15c04] secure this thing		</span>
+</pre>
+	<p>ora ricontrollando notiamo (per esempio) che su questa commit il problema è presente e lo comunichiamo a Git con <span class="comando">bad</span>:
+	</p>
+	<pre>git bisect bad</pre>
+	<p>che ci restituisce</p>
+	<pre>
+<span class="nota">Bisecting: 1 revisions left to test after this
+[f71ce38690acf49c1f3c9bea38e09d82a5ce6014] drop exceptions table 	</span>
+</pre>
+	<p>questa commit va bene. A questo punto Git ha tutte le informazioni per determinare dov'è il problema	e quindi ci restituisce l'hash della prima commit che ha generato il problema  ed alcune informazioni relative e quali file sono stati modificati in quella commit in modo da darci la possibilità di arrivare al bug. <br />
+Ecco un esempio di outupt:
+	</p>
+	<pre>
+<span class="nota">b047b02ea83310a70fd603dc8cd7a6cd13d15c04 is first bad commit
+commit b047b02ea83310a70fd603dc8cd7a6cd13d15c04
+Author: PJ Hyett &lt;pjhyett@example.com&gt;
+Date:   Tue Jan 27 14:48:32 2009 -0800
+
+    secure this thing
+
+:040000 040000 40ee3e7821b895e52c1695092db9bdc4c61d1730
+f24d3c6ebcfc639b1a3814550e62d60b8e68a8e4 M  config		</span>
+</pre>
+
+	<p>quando abbiamo fatto i nostri controlli dobbiamo dare il comando <span class="comando">git bisect reset</span> per chiudere il processo:</p>
+	<pre>git bisect reset</pre>
+
+	<p>Un'altra ricerca che è possibile fare è quella di risalire alla commit conoscendo lo script che da problemi. <br />
+	In questo caso utilizziamo il comando <span class="comando">bisect start</span> a cui aggiungiamo la bad e good commit:
+	</p>
+	<pre>git bisect start HEAD v1.0</pre>
+	<p>è chiaro che la bad commit è rappresentata da 	HEAD	e la good commit dall'etichetta v1.0. <br />
+Dopodichè diamo il comando <span class="comando">git bisect run</span>	a cui passiamo il nome del file in cui è presente lo script dannoso
+	</p>
+	<pre>git bisect run test-error.sh</pre>
+	<p>Git farà la sua ricerca fino a quando non scoprirà la commit in cui il file dannoso <q>test-error.sh</q> è stato introdotto. 	</p>
+
+</section>
+
+<section id="s12">
+	<h2>Lavorare coi moduli</h2>
+
+	<p>I moduli consentono di avere un repository Git come una directory di un altro repository Git, che ci permette di clonare un altro repository nel nostro progetto e mantenere le commit separate. <br />
+<a href="http://git-scm.com/book/it/v1/Strumenti-di-Git-Moduli">vedere qui</a>
+</p>
+
+
+</section>
+
+
+<section>
+</section>
+<section>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+									<div id="freccia_sali"><div></div> </div> 
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="JS/min/scorrimentoPagina2.js"></script>
+<script type="text/javascript">
+
+var sezioni = document.querySelector(".sezioni");
+sezioni.addEventListener("change", function (){
+	var valSez = this.value;
+	var pattern = "#" + valSez;
+		document.location.href = pattern;
+}, false);
+
+// Per lo scorrimento del documento, verso l'alto
+var obj = new ScrollPage('1000', 100, 'freccia_sali', 300);
+obj.showFreccia();
+obj.clickScroll();
+//bloccaPropagazione();	
+
+</script>
+
+
+
+
+<br /><br /><br /><br /><br /><br /><br /><br />
+
+</body>
+</html>
+
