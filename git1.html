@@ -13,7 +13,7 @@
 <div class="uelleCapitoli" >
 	<ul class="capitoliGit">
 		<li><a href="Master.html">Master Git Tutorial</a> </li>
-		<li><a href="git2.html">cap.2 - Baso di Git</a></li>
+		<li><a href="git2.html">cap.2 - Basi di Git</a></li>
 		<li><a href="git3.html">cap.3 - Diramazioni </a></li>
 		<li><a href="git4.html">cap.4 - Partecipazione Progetti</a></li>
 		<li><a href="git5.html">cap.5 - Strumenti di Git</a></li>
@@ -54,7 +54,48 @@ Con l'opzione <span class="comando">--global</span> dovrai farlo solo una volta,
 
 	<p>Per controllare una in specifico, es:</p>
 	<pre>git config user.name</pre>
+
+	<h3>Esclusione file</h3>
+	<pre>git config --global core.excludesfile &lt;nomeFile&gt; </pre>
+	<p>E' un'alternativa al file <span class="nota">.gitignore</span> (vedere cap.2: <a href="http://localhost/GitTutorial/git2.html#s6">Ignorare file</a>). Nel file passato come argomento (completo di percorso) si possono inserire delle regole  per escludere alcuni tipi di file dal tracciamento. Questa configurazione è esterna al progetto (a differenza di <q>.gitignore</q>) e quindi una volta configurata è valida per tutti i futuri progetti. Ciò non toglie che <q>.gitignore</q> possa sovrascrive il file di questa configurazione. 
+	</p>
+
+	<h3>Personalizzare l'output coi colori</h3>	
+	<pre>git config --global color.ui true</pre>
+	<p>Attiva tutti i colori di default nel terminale. In questo modo Git visualizzerà i suoi messaggi con colori vari in modo da renderli più leggibili. <br />
+Nel caso in cui si desideri una configurazione più specifica per comando, o si abbia una versione meno recente, Git fornisce impostazioni di colorazione <span class="nota">verb-specific</span>. Ognuna di esse può essere impostata a <span class="nota">true, false</span> oppure <span class="nota">always</span>:
+	</p>
+	<pre>
+color.branch
+color.diff
+color.interactive
+color.status
+</pre>
+
 </section>
+
+
+
+<section>
+	<h2>Configurare l'esportazione</h2>
+	<p>Alcune impostazioni possono anche essere specificate per un percorso, per fare in modo che Git applichi queste impostazioni solo per una sottodirectory o un sottoinsieme di files. <br />
+Queste opzioni <q>path-specific</q> sono chiamate <span class="nota">attributi di Git</span> e sono impostati nel file <span class="nota">.gitattributes</span> in una delle directories del progetto (normalmente nella radice del progetto) oppure nel file <span class="nota">.git/info/attributes</span> se non si vuole che venga fatto il commit del file degli attributi del proprio progetto.
+	</p>
+	<p>
+Usando gli attributi, si possono fare cose come specificare strategie di merge separate per files individuali o directories nel proprio progetto, comunicare a Git come fare diff per files non di testo, oppure fare in modo che Git filtri il contenuto prima del check all'interno o all'esterno di Git. <br />
+Gli attributi Git permettono inoltre di attuare operazioni interessanti quando si esporta un archivio del proprio progetto. <br />
+È possibile comunicare a Git di non esportare alcuni files o directories quando si genera un archivio. <br />
+Nel caso ci sia una sottodirectory o file che non si vuole includere nell'archivio ma che si vuole comunque tenere nel progetto, è possibile determinare questi files tramite l'attributo <span class="nota">export-ignore</span>.
+	</p>
+	<p>Per esempio, diciamo di avere dei files per i test in una sottodirectory <span class="nota">test/</span>, non avrebbe senso includerla in un tarball del progetto. È possibile aggiungere la seguente riga al file Git attributes:
+	</p>
+	<pre>test/ export-ignore</pre>
+	<p>Ora, quando verrà eseguito <span class="nota">git archive</span> per creare la tarball del progetto, la directory non sarà inclusa nell'archivio.</p>
+
+</section>
+
+
+
 
 <section>
 	<h2>Ottenere Aiuto</h2>
