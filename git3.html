@@ -17,8 +17,6 @@
 		<li><a href="git2.html">cap.2 - Basi di Git </a></li>
 		<li><a href="git4.html">cap.4 - Partecipazione Progetti</a></li>
 		<li><a href="git5.html">cap.5 - Strumenti di Git</a></li>
-		<li><a href="git6.html">cap.6 - </a> </li>
-		<li><a href="git7.html">cap.7 - </a> </li>
 	</ul>
 </div>
 
@@ -48,12 +46,16 @@
 			<option value="s9">Rami di Monitoraggio</option>
 			<option value="s10">Eliminazione di Rami Remoti</option>
 		</optgroup>
+		<optgroup label="Rifondazione">
+			<option value="s11">Rebase</option>
+			
+		</optgroup>
 	</select>
 </section>
 
 <section id="s1">
 	<h2>Diramazioni</h2>
-	<p class="nota">Fare una Diramazione significa divergere dal flusso principale di sviluppo continuando a lavorare senza correre il rischio di pasticciare il flusso principale
+	<p class="nota">Fare una Diramazione significa divergere dal flusso principale di sviluppo continuando a lavorare senza correre il rischio di pasticciare il flusso principale.
 	</p>
 	<p>Molte persone fanno riferimento al modello di diramazioni di Git indicandola come la "caratteristica vincente", e questo certamente separa Git dagli altri VCS. Perché è così speciale? <br />
 Git crea ramificazioni in modo incredibilmente semplice e leggero, permettendo operazioni di diramazione praticamente istantanee come lo sono anche i passaggi da un ramo ad un altro. <br />
@@ -71,7 +73,7 @@ Diversamente da molti altri VCS, Git incoraggia un metodo di lavoro che sfrutta 
 	<pre>git branch testing</pre>
 	<p>questo comando crea un nuovo ramo che punta all'ultima commit. </p>
 
-	<p>Quindi ora abbiamo due rami (<span class="nota">master e testing</span>) che puntano all'ultima commit. 
+	<p>Quindi ora abbiamo due rami (<span class="nota">master</span> e <span class="nota">testing</span>) che puntano all'ultima commit. 
 Come fa Git a sapere in quale ramo ci troviamo ora? <br />
 Lui mantiene uno speciale puntatore chiamato <span class="nota">HEAD</span> (vedere il file 'HEAD'). In Git, <span class="nota">HEAD</span> è un puntatore al ramo locale su cui ci si trova. <br />
 In questo caso siamo ancora sul ramo master. Il comando <span class="comando">git branch</span> ha solamente creato un nuovo ramo ma non si è spostato in questo ramo.  
@@ -80,34 +82,33 @@ Per spostarsi in un ramo preesistente, bisogna usare il comando <span class="com
 	<p>Quindi per spostarci sul ramo <span class="nota">testing</span>:</p>
 	<pre>git checkout testing</pre>
 
-	<p>oppure in un unico comando, inserendo l'opzione <span class="comando">-b</span> abbiamo creazione e spostamento allo stesso tempo</p>
+	<p>oppure in un unico comando, inserendo l'opzione <span class="comando">-b</span> possiamo creare il ramo e spostarci su di esso:</p>
 	<pre>git checkout -b testing</pre>
-	<p>se si osserva il file <span class="nota">HEAD</span> si noterà il cambiamento </p>
+	<p>se si osserva il file <span class="nota">HEAD</span> si noterà il cambiamento. </p>
 
 	<p>Qual'è il significato di tutto questo? 
-Se ora si fanno dei cambiamenti e si esegue la commit, quest'ultima farà parte del ramo <span class="nota">testing</span> mentre la precedente commit fa sempre parte di <span class="nota">master</span>. 
+Se ora si fanno dei cambiamenti e si esegue la commit, quest'ultima farà parte del ramo <span class="nota">testing</span> mentre la precedente commit fa sempre parte di <span class="nota">master</span>. In altre parole il ramo <span class="nota">testing</span> è avanzato di una commit rispetto a <span class="nota">master</span>. 
 	</p>
 
 	<p>Se ritorniamo nuovamente al ramo principale <span class="nota">master</span></p>
 	<pre>git checkout master</pre>
-	<p>facciamo due cose: oltre a spostare il puntatore <span class="nota">HEAD</span> indietro,  riportiamo i file nella directory di lavoro allo stato in cui si trovavano in quel momento. <br />
-Questo vuol dire che se ora andiamo ad eseguire dei cambiamenti saranno separati da quelli che si trovano nell'ultima commit (quella eseguita dopo che ci si è spostati sul ramo <span class="nota">testing</span>)
-In altre parole abbiamo isolato i cambiamenti in posti (rami) separati. 
+	<p>facciamo due cose: oltre a spostare il puntatore <span class="nota">HEAD</span> indietro,  riportiamo i file nella directory di lavoro allo stato in cui si trovavano inizialmente. <br />
+Quindi, in pratica, è successo che abbiamo isolato i cambiamenti in posti (rami) separati. Ciò non toglie che i cambiamenti apportati sul ramo <span class="nota">testing</span> possano essere trasferiti sul ramo principale <span class="nota">master</span>: questo processo si chaima <span class="nota">fusione</span> e lo vedremo in seguito ( <a href="#s4">vedi qui</a>). 
 	</p>
 </section>
 
 <section id="s2">
 	<h2>Controllare la lista dei rami</h2>
-	<p>Per poter visualizzare la lista dei rami creati si può dare semplicemente <span class="comando">git branch</span></p>
+	<p>Per poter visualizzare la lista dei rami creati si può dare semplicemente <span class="comando">git branch</span>:</p>
 	<pre>git branch</pre>
-	<p>mostrerà la lista dei rami e quello in cui ci si trova al momento è mostrato in verde e precedeuto da un asterisco (*). <br /> 
+	<p>mostrerà la lista dei rami e quello in cui ci si trova al momento è mostrato in verde e preceduto da un asterisco (*). <br /> 
 Per verificarlo si può aprire il file <span class="nota">HEAD</span>
 	</p>
 </section>
 
 <section id="s3">
 	<h2>Eliminare un ramo</h2>
-	<p>Per eliminare un ramo bisogna aggiungere a <span class="comando">git branch</span> l'opzione <span class="comando">-d</span> seguita dal nome del ramo da eliminare. </p>
+	<p>Per eliminare un ramo bisogna aggiungere a <span class="comando">git branch</span> l'opzione <span class="comando">-d</span> seguita dal nome del ramo da eliminare: </p>
 	<pre>git branch -d  test</pre>
 	<p>sarà eliminato il ramo di nome <span class="nota">test</span>.</p>
 
@@ -189,9 +190,9 @@ I nostri file conterranno una sezione che assomiglierà a qualcosa tipo:
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; iss53:index.html
 </pre>
 
-	<p>Questo significa che la versione in HEAD (del ramo principale, perché è dove ci siamo spostati precedentemente quando abbiamo avviato il comando di fusione) è la parte superiore del blocco (tutto quello che sta sopra a =======), mentre la versione nel ramo iss53 sarà la parte sottostante. Per risolvere il conflitto, si dovrà scegliere una parte o l'altra oppure fondere i contenuti di persona. 
+	<p>Questo significa che la versione in HEAD (del ramo principale, perché è dove ci siamo spostati precedentemente quando abbiamo avviato il comando di fusione) è la parte superiore del blocco (tutto quello che sta sopra a =======), mentre la versione nel ramo <span class="nota">iss53</span> sarà la parte sottostante. Per risolvere il conflitto, si dovrà scegliere una parte o l'altra oppure fondere i contenuti di persona. 
 	</p>
-	<p>Dopo che si è risolto ogni singola sezione di conflitto del file, bisogna avviare <span class="comando">git add</span> su ogni file per marcarlo come risolto. Mettere in stage il file è come marcarlo risolto in Git
+	<p>Dopo che si è risolto ogni singola sezione di conflitto del file, bisogna avviare <span class="comando">git add</span> su ogni file per marcarlo come risolto. Mettere in stage il file è come marcarlo risolto in Git. 
 	</p>
 	<p>Meglio dare <span class="comando">git status</span> nuovamente per verificare che tutti i conflitti sono stati risolti. <br />
 Se soddisfatti di questo, e verificato che tutti i conflitti sono stati messi in stage, si può dare <span class="comando">git commit</span> per terminare la fusione. Il messaggio del commit predefinito (quello del file che si apre automatcamente) assomiglierà a qualcosa tipo:
@@ -221,7 +222,7 @@ Conflicts:
 	<p>Un esempio di output potrebbe essere:</p>
 	<pre>
 <span class="nota"> iss53
-* master
+* <span class="verde">master</span>
  testing 		</span>
 </pre>
 
@@ -231,11 +232,11 @@ Conflicts:
 	<p>Un esempio di output potrebbe essere:</p>
 	<pre>
 <span class="nota"> iss53   93b412c fix javascript issue
-* master  7a98805 Merge branch 'iss53'
+* <span class="verde">master</span>  7a98805 Merge branch 'iss53'
  testing 782fd34 add scott to the author list in the readmes		</span>
 </pre>
 
-	<p>Un'altro comando che potrebbe tornare utile è <span class="comando">--merged</span> il quale restituisce soltanto i rami che sono stati fusi. <br /> Mentre <span class="comando">--no-merged</span> restituisce i rami che non sono stati ancora fusi 
+	<p>Un'altro comando che potrebbe tornare utile è <span class="comando">--merged</span> il quale restituisce soltanto i rami che sono stati fusi. <br /> Mentre <span class="comando">--no-merged</span> restituisce i rami che non sono stati ancora fusi: 
 	</p>
 	<pre>
 git branch --merged
@@ -249,7 +250,7 @@ git branch --no-merged
 If you are sure you want to delete it, run 'git branch -D testing'.	</span>
 </pre>
 
-	<p>Per evitare questo errore e forzare la eliminazione si può usare l'opzione <span class="comando">-D</span> (come suggerito)	</p>
+	<p>Per evitare questo errore e forzare la eliminazione si può usare l'opzione <span class="comando">-D</span> (come suggerito):	</p>
 	<pre>git branch -D testing</pre>
 	<p>il ramo <span class="nota">testing</span> (che nel caso non è stato fuso) sarà eliminato con tutto il suo lavoro contenuto</p>
 
@@ -259,16 +260,16 @@ If you are sure you want to delete it, run 'git branch -D testing'.	</span>
 	<h2>Rami remoti</h2>
 	<p>I rami remoti sono riferimenti allo stato dei rami sui propri repository remoti. Sono rami locali che non si possono muovere; sono spostati automaticamente ogni volta che viene fatta una comunicazione di rete. Prendono la forma di <span class="nota">(remote)/(branch)</span>.
 	</p>
-	<p>Se per esempio si ha un server Git in rete raggiungibile a <span class="nota">git.ourcompany.com</span> e si effettua una clonazione da qui, Git automaticamente lo nomina <span class="nota">origin</span>, effettua il pull di tutti i dati, crea un puntatore dove si trova il ramo master e lo nomina localmente <span class="nota">origin/master</span>; e non lo si può spostare. <br />
+	<p>Se per esempio si ha un server Git in rete raggiungibile a <span class="nota">git.ourcompany.com</span> e si effettua una clonazione da qui, Git automaticamente lo nomina <span class="nota">origin</span>, effettua il <span class="comando">pull</span> di tutti i dati, crea un puntatore dove si trova il ramo <span class="nota">master</span> e lo nomina localmente <span class="nota">origin/master</span>; e non lo si può spostare. <br />
 Git inoltre ci da il ramo <span class="nota">master</span> che parte dallo stesso punto del ramo originario (remoto) <span class="nota">master</span>, in modo da avere qualcosa da cui poter iniziare a lavorare.
 	</p>
 	<p>Se si fa del lavoro sul proprio ramo principale locale, e, allo stesso tempo, qualcuno ha inviato degli aggiornamenti al ramo principale di <span class="nota">git.ourcompany.com</span>, allora la nostra storia si muoverà in avanti in modo differente. Inoltre, non avendo contatto con il server di partenza, il proprio puntatore <span class="nota">origin/master</span> non si sposterà a differenza del remoto. <br />
-Però è possibile sincronizzare la propria directory di lavoro (aggiornare il proprio database) con il comando <span class="comando">git fetch origin</span>
+Però è possibile sincronizzare la propria directory di lavoro (aggiornare il proprio database) con il comando <span class="comando">git fetch origin</span>:
 	</p>
 	<pre>git fetch origin </pre>
 	<p>Questo comando guarda qual'è il server di origine (in questo caso, è <span class="nota">git.ourcompany.com)</span>, preleva qualsiasi dato che ancora non si possiede, e aggiorna il proprio database locale, spostando il puntatore <span class="nota">origin/master</span> alla sua nuova, più aggiornata posizione. 
 	</p>
-	<p>### ATTENZIONE: se ora vogliamo vedere gli aggiornamenti fatti sul server (che abbiamo sincronizzato con <span class="comando">git fetch origin</span>), per esempio con <span class="comando">git log -p 1</span>, dobbiamo spostarci sul ramo <span class="nota">origin/master</span> che non compare nella lista dei nostri rami locali, infatti se diamo <span class="comando">git branch</span> non ci apparirà, ma sappiamo che c'è, per cui diamo: 
+	<p>### ATTENZIONE: se ora vogliamo vedere gli aggiornamenti fatti sul server (che abbiamo sincronizzato con <span class="comando">git fetch origin</span>), per esempio con <span class="comando">git log -p</span>, dobbiamo spostarci sul ramo <span class="nota">origin/master</span> che non compare nella lista dei nostri rami locali, infatti se diamo <span class="comando">git branch</span> non ci apparirà, ma sappiamo che c'è, per cui diamo: 
 	</p>
 	<pre>git checkout origin/master</pre>
 	<p>Parte di output dopo il comando:</p>
@@ -280,7 +281,7 @@ You can look around, make experimental changes and commit them, ... "
 	<pre>git branch</pre>
 	<p>Git ci mostrerà anche il ramo <span class="nota">origin/master</span>:</p>
 	<pre>
-<span class="nota">* (detached from origin/master)
+<span class="nota">* <span class="verde">(detached from origin/master)</span>
  master
 ... eventuali rami		</span>
 </pre>
@@ -374,22 +375,53 @@ Tuttavia, si possono impostare altri rami di monitoraggio se vogliamo — che no
 
 <section id="s10">
 	<h2>Eliminazione di Rami Remoti</h2>
-	<p>Supponendo di stare a lavorare con un ramo remoto — diciamo che con i miei collaboratori ho finito con una funzionalità e l'abbiamo fusa nel ramo remoto master (o qualsiasi ramo stabile del progetto). Possiamo eliminare un ramo remoto con una sintassi abbastanza ottusa <span class="comando">git push [remotename] :[branch]</span>. <br />
+	<p>Supponendo di stare a lavorare con un ramo remoto — diciamo che con i miei collaboratori ho finito con una funzionalità e l'abbiamo fusa nel ramo remoto <span class="nota">master</span> (o qualsiasi ramo stabile del progetto). Possiamo eliminare un ramo remoto con una sintassi abbastanza ottusa <span class="comando">git push [remotename] :[branch]</span>. <br />
 Quindi per eliminare il ramo <span class="nota">serverfix</span> diamo:
 	</p>
 	<pre>git push origin :serverfix</pre>
-	<p>il ramo scomparirà dal server remoto </p>
+	<p>il ramo scomparirà dal server remoto. </p>
 
 </section>
 
-<section>
+<section id="s11">
+	<h2>Rebase</h2>
+	<p>In Git, ci sono due modi per integrare i cambiamenti da un ramo in un altro: il <span class="comando">merge</span> (visto sopra) ed il <span class="comando">rebase</span>. <br />
+Per capire quando usare il <span class="comando">rebase</span> è meglio fare un esempio (tutto in locale).
+	</p>
+	<p>Poniamo di voler fare un lavoro su un documento e quindi creiamo un nuovo ramo <span class="nota">ramo2</span>; facciamo il nostro lavoro e committiamo: </p>
+	<pre>
+git checkout -b ramo2 master
+<span class="nota">  # esecuzione modifiche		</span>
+git commit -am "Eseguite delle modifiche sul file 'dieta.html' "
+</pre>
+
+	<p>Nel frattempo si prospetta una modifica importante da apportare ad un'altro file. Per cui creiamo un'altro ramo, <span class="nota">ramo3</span>, per poterci lavorare. A lavoro ultimato committiamo le modifiche e facciamo la fusione  con il ramo principale <span class="nota">master</span>; infine eliminiamo <span class="nota">ramo3</span>:
+	</p>
+	<pre>
+git checkout -b ramo3 master
+<span class="nota">  # esecuzione modifiche	</span>
+git commit -am "Risolto il problema al file 'index.html' "
+git checkout master
+git merge ramo3
+git branch -d ramo3
+</pre>
+	<p>A questo punto il ramo <span class="nota">master</span> è avanzato di una commit rispetto al ramo <span class="nota">ramo2</span> e se si va a fare il <span class="comando">merge</span> dei due rami nascerebbero dei problemi di sincronizzazione a causa della modifica fatta al file <q>index.html</q> che non è stata sincronizzata in <span class="nota">ramo2</span>. <br />
+Pertanto bisogna attuare, prima di tutto, questa sincronizzazione tra i due rami prima di fare la fusione e quindi utilizziamo il comando <span class="comando">rebase</span>:
+	</p>
+	<pre>
+git checkout ramo2
+git rebase master
+</pre>
+	<p>Ora che i due rami sono sincronizzati e le modifiche apportate al file <q>index.html</q> sono state inserite anche in <span class="nota">ramo2</span> possiamo fare la fusione dei due rami con il comando <span class="comando">'merge</span>:
+	</p>
+	<pre>
+git checkout master
+git merge ramo2
+</pre>
+
 </section>
-<section>
-</section>
-<section>
-</section>
-<section>
-</section>
+
+
 <section>
 </section>
 
