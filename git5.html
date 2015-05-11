@@ -17,8 +17,6 @@
 		<li><a href="git2.html">cap.2 - Basi di Git</a></li>
 		<li><a href="git3.html">cap.3 - Diramazioni</a></li>
 		<li><a href="git4.html">cap.4 - Partecipazione Progetti</a></li>
-		<li><a href="git6.html">cap.6 - </a> </li>
-		<li><a href="git7.html">cap.7 - </a> </li>
 	</ul>
 </div>
 
@@ -57,7 +55,7 @@
 
 <section id="s1">
 	<h2>Accantonare il proprio lavoro</h2>
-	<p>Potrà capitare che mentre si sta lavorando ad un lavoro lo si debba lasciare per passare ad un'altro lavoro. In questo caso c'è la possibilità di accantonare il lavoro fatto per riprenderlo in un secondo momento usando il comando <span class="comando">git stash</span>. 
+	<p>Potrà capitare che mentre si sta lavorando ad un documento lo si debba lasciare per passare ad un'altro lavoro. In questo caso c'è la possibilità di accantonare il lavoro fatto per riprenderlo in un secondo momento usando il comando <span class="comando">git stash</span>. 
 <br /> Supponendo di aver modificato un paio di file diamo:	
 	</p>
 	<pre>git stash</pre>
@@ -89,7 +87,7 @@ Quando avremo deciso di voler riprendere un lavoro accantonato per poterlo commi
 git stash apply				<span class="nota">riprende l'ultimo accantonamento</span>
 git stash apply stash@{2]		<span class="nota">riprende il secondo accantonamento</span>
 </pre>
-	<p>Le modifiche vedrranno riapplicate ai file, ma quello che si aveva assemblato ora non lo sono più.</p>
+	<p>Le modifiche verranno riapplicate ai file, ma quello che si aveva assemblato ora non lo sono più.</p>
 
 </section>
 
@@ -132,7 +130,7 @@ stash@{0} eliminata (049d078hkjkfd8dgfd878fg78d)		</span>
 Un modo facile per ritestare le modifiche accantonate, è eseguire il comando <span class="comando">git stash branch</span>, che crea una diramazione, scarica la commit dov'eravamo quando abbiamo accantonato il lavoro, lo riapplica e, se ci riesce senza problemi, cancella l'accantonamento:
 	</p>
 	<pre>git stash branch testchanges</pre>
-	<p>Questa è una bella accorciatoioa per recuperare il lavoro accantonato e lavorarci in una nuova diramazione.</p>
+	<p>Questa è una bella scorciatoia per recuperare il lavoro accantonato e lavorarci in una nuova diramazione.</p>
 
 </section>
 
@@ -212,7 +210,7 @@ squash a5f4a0d added cat-fil		</span>
 	<p>A volte può accadere, specialmente quando si usa il comando <span class="comando">git add .</span>,  di aggiungere qualche file che contiene delle password (<q>personal-pass.txt</q>) che non si vogliono mostrare pubblicamente. Quando ce ne rendiamo conto della pericolosa distrazione per rimediare alla meglio dobbiamo fare in modo di eliminare il file da tutte le commit eventualmente eseguite e per fare ciò diamo:
 	</p>
 	<pre>git filter-branch --tree-filter 'rm -f personal-pass.txt' HEAD</pre>	
-	<p>Nel caso specifico le commit riscritte saranno quelle eseguite dopo l'immissione del file non in questione  </p>
+	<p>Nel caso specifico le commit riscritte saranno quelle eseguite dopo l'immissione del file in questione.  </p>
 
 	<p>E' possibile inoltre, utilizzando lo stesso comando, rimuovere i file di backup, quelli originati automaticamente, in questo modo:	
 	</p>
@@ -220,7 +218,7 @@ squash a5f4a0d added cat-fil		</span>
 	<p>per evitarli è comunque consigliabile inserire la regola appropriata nel file <q>.gitignore</q> come visto nel capitolo 2: <a href="http://localhost/GitTutorial/git2.html#s6">Ignorare i file</a>
 	</p>
 
-	<h3>Canbiare l'indirizzo e-mail </h3>
+	<h3>Cambiare l'indirizzo e-mail </h3>
 	<p>Può esserci il caso che si voglia cambiare l'indirizzo e-mail per un progetto senza cambiare quello definito nella regola <span class="comando">git config</span>:
 	</p>
 	<pre>
@@ -236,7 +234,7 @@ git filter-branch --commit-filter '
 </pre>
 	<p>Se abbiamo configurato in <span class="comando">config</span>: </p>
 	<pre>git config --global user.email "schacon@localhost"</pre>
-	<p>Il comando cambierà l'indirizzo e-mail in <q>schacon@example.com</q> nella cronologia delle commit del nostro progetto </p>
+	<p>Il comando cambierà l'indirizzo e-mail in <q>schacon@example.com</q> nella cronologia delle commit del nostro progetto. </p>
 
 
 </section>
@@ -246,7 +244,7 @@ git filter-branch --commit-filter '
 	<p>Git fornisce degli strumenti molto utili nel caso si voglia rintracciare un bug all'interno di un file o comunque controllare una qualsiasi parte di file. Il comando che ci permette quest'analisi è <span class="comando">git blame</span> 
 	</p>
 	<pre>git blame -L 12,22 simplegit.rb</pre>
-	<p>L'opzione <span class="comando">-L</span> seguita dalla coppia di numeri indica la limitazione nella ricerca dalla riga 12 alla 22 del file <q>simplegit.rb</q>. <br />
+	<p>L'opzione <span class="comando">-L</span> seguita dalla coppia di numeri indica la limitazione nella ricerca, dalla riga 12 alla 22, del file <q>simplegit.rb</q>. <br />
 Una esempio di output potrebbe essere il seguente: 
 	</p>
 	<pre>
@@ -344,40 +342,15 @@ Dopodichè diamo il comando <span class="comando">git bisect run</span>	a cui pa
 <a href="http://git-scm.com/book/it/v1/Strumenti-di-Git-Moduli">vedere qui</a>
 </p>
 
-
 </section>
 
 
 <section>
 </section>
-<section>
-</section>
-
-
-
-
-
-
-
-
-
-
-
-
 
 </article>
 
-
 									<div id="freccia_sali"><div></div> </div> 
-
-
-
-
-
-
-
-
-
 
 
 <script type="text/javascript" src="JS/min/scorrimentoPagina2.js"></script>
