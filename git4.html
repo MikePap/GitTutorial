@@ -17,8 +17,6 @@
 		<li><a href="git2.html">cap.2 - Basi di Git</a></li>
 		<li><a href="git3.html">cap.3 - Diramazioni</a></li>
 		<li><a href="git5.html">cap.5 - Strumenti di Git</a></li>
-		<li><a href="git6.html">cap.6 - </a> </li>
-		<li><a href="git7.html">cap.7 - </a> </li>
 	</ul>
 </div>
 
@@ -51,7 +49,7 @@
 	<h2>Contribuire a un progetto</h2>
 	<p>La difficoltà maggiore nel descrivere questo processo è che ci sono molte variazioni su come può venir fatto. Poiché Git è molto flessibile la gente può lavorare insieme in molti modi (ed effettivamente lo fa). 
 	</p>
-	<p>Il progetto di Git fornisce un documento che da molti suggerimenti circa le commit per/da cui creare patch: puoi trovarlo nel codice sorgente di Git nel file <span class="nota">Documentation/SubmittingPatches</span>
+	<p>Il progetto di Git fornisce un documento che da molti suggerimenti circa le commit per/da cui creare patch: si può trovarlo nel codice sorgente di Git nel file <span class="nota">Documentation/SubmittingPatches</span>
 	</p>
 </section>
 
@@ -69,13 +67,13 @@ git commit -am 'rimosso valore non valido'	<span class="nota">esegue la commit</
 	
 	<p>2) Il secondo sviluppatore, Jessica, fa la stessa cosa - clona il repository e committa le modifiche</p>
 	<pre>
-clonazione repo, esecuzione lavoro e ...
+<span class="nota">clonazione repo, esecuzione lavoro e ...	</span>
 git commit -am 'aggiunto il processo di reset'
 </pre>
 	<p>In più, Jessica invia il suo lavoro al server con una <span class="comando">push</span>:</p>
 	<pre>git push origin master</pre>
 
-	<p>3) Anche John cerca di eseguire una <span class="comando">push</span> ma lo fa dopo Jassica e fallisce:</p>
+	<p>3) Anche John cerca di eseguire una <span class="comando">push</span> ma lo fa dopo Jessica e fallisce:</p>
 	<pre>git push origin master</pre>
 	<p>l'output dell'errore che riceve:</p>
 	<pre>
@@ -83,17 +81,17 @@ git commit -am 'aggiunto il processo di reset'
  ! [rejected]        master -> master (non-fast forward)
 error: failed to push some refs to 'john@githost:simplegit.git'	</span>
 </pre>
-	<p>L'errore è dovuto al fatto che il puntatore di John non è sincronizzato con quello del server perchè Jessica con la sua commit l'ha portato in avanti. In altre parole	deve prima scaricare le modifiche di Jessica e unirle alle sue prima di poter fare una <span class="comando">push</span>:
+	<p>L'errore è dovuto al fatto che il puntatore di John non è sincronizzato con quello del server perchè Jessica con la sua commit l'ha portato in avanti. In altre parole	deve prima scaricare le modifiche di Jessica con <span class="comando">git fetch origin</span> e unirle alle sue prima di poter fare una <span class="comando">push</span>:
 	</p>
 	<pre>git fetch origin</pre>
-	<p>Ora la sincronizzazione delle commit è fatta e l'ultima commit è nel locale di John. Ma <span class="comando">git fetch origin</span> non apporta le modifiche ai file locali pertanto prima di poter fare la <span class="comando">push</span> deve fare questa operazione con il comando <span class="comando">merge</span>:  
+	<p>Ora la sincronizzazione delle commit è fatta e l'ultima commit è nel locale di John. Ma <span class="comando">git fetch origin</span> non apporta le modifiche ai file locali, pertanto prima di poter fare la <span class="comando">push</span> deve fare questa operazione con il comando <span class="comando">merge</span>:  
 	</p>
 	<pre>git merge origin/master</pre>
 	<p>John ora può testare il suo codice per essere sicuro che continui a funzionare correttamente e può quindi eseguire la <span class="comando">push</span> del tutto sul server:
 	</p>
 	<pre>git push origin master</pre>
 
-	<p>4) Jessica nel frattempo sta lavorando a un altro ramo. Ha creato un branch chiamato <span class="nota">problema54</span> e ha eseguito tre commit su quel branch. Poiché non ha ancora recuperato le modifiche di John deve quindi sincronizzarsi con John, quindi esegue:
+	<p>4) Jessica nel frattempo sta lavorando a un'altro ramo. Ha creato un branch chiamato <span class="nota">problema54</span> e ha eseguito tre commit su quel branch. Poiché non ha ancora recuperato le modifiche di John deve quindi sincronizzarsi con John, quindi esegue:
 	</p>
 	<pre>git fetch origin</pre>
 	<p>Jessica pensa che il suo ramo sia pronto, però vuole sapere con cosa deve unire il suo lavoro prima di eseguire la <span class="comando">push</span>. <br />
@@ -137,9 +135,9 @@ Questo primo esempio descrive come contribuire con i <b>fork</b> su host Git che
 git clone (url)
 cd project
 git checkout -b funzionalitaA
-(lavoro)
+<span class="nota">(lavoro)</span>
 git commit
-(lavoro)
+<span class="nota">(lavoro)</span>
 git commit
 </pre>
 	
@@ -148,14 +146,14 @@ Si dovrà quindi aggiungere l'URL di questo nuovo repository come un secondo rem
 	</p>
 	<pre>git remote add miofork (url)</pre>
 
-	<p>Dopodichè si dovrà eseguire una <span class="comando">push</span> del proprio lavoro verso il nuovo repository. È più semplice fare la <span class="comando">push</span> del branch a cui si sta lavorando piuttosto che unirlo al proprio master e fare la <span class="comando">push</span> di quest'ultimo. La ragione è che se il lavoro non verrà accettato, oppure lo sarà solo in parte, non si dovrà ripristinare il proprio master. <br /> Se i mantenitori uniscono, fanno un <span class="comando">rebase</span>, o prendono pezzi dal tuo lavoro col <span class="comando">cherry-pick</span>, si otterrà il nuovo <span class="nota">master</span> alla prossima <span class="comando">pull</span> dal loro repository:
+	<p>Dopodichè si dovrà eseguire una <span class="comando">push</span> del proprio lavoro verso il nuovo repository. È più semplice fare la <span class="comando">push</span> del branch a cui si sta lavorando piuttosto che unirlo al proprio master e fare la <span class="comando">push</span> di quest'ultimo. La ragione è che se il lavoro non verrà accettato, oppure lo sarà solo in parte, non si dovrà ripristinare il proprio master. <br /> Se i mantenitori uniscono, fanno un <span class="comando">rebase</span>, o prendono pezzi dal nostro lavoro col <span class="comando">cherry-pick</span>, si otterrà il nuovo <span class="nota">master</span> alla prossima <span class="comando">pull</span> dal loro repository:
 	</p>
 	<pre>git push myfork funzionalitaA</pre>
 	<p>Eseguita la <span class="comando">push</span> del lavoro sul nuovo/proprio fork, bisogna avvisare i mantenitori. <br />
 Questo passaggio viene spesso definito <q><b>richiesta di pull</b></q> (<span class="nota">pull request</span>), e lo si può fare tramite lo stesso sito (<q>GitHub</q> ha un pulsante <q>pull request</q> che automaticamente notifica i mantenitori) o eseguire il comando <span class="comando">git request-pull</span> e inviare manualmente via email l'output ai mantenitori. 
 	</p>
 	<p>Il comando <span class="comando">request-pull</span> riceve come parametri il branch di base sul quale si vuol fare applicare le modifiche e l'URL del repository Git da cui prenderle, e produce il sommario di tutte queste modifiche in output. <br />
-Se, per esempio, Jessica volesse inviare a John una richiesta di <span class="comando">pull</span>, e avesse eseguito due commit sul branch di cui ha appena effettuato il <span class="comando">push</span>, può eseguire questo (il seguente in GitHub non serve perchè c'è il pulsante <span class="nota">pull request</span>):	
+Se, per esempio, si volesse inviare al mantenitore una richiesta di <span class="comando">pull</span>, e abbiamo eseguito due commit sul branch di cui abbiamo appena effettuato il <span class="comando">push</span>, possiamo eseguire questo (il seguente in GitHub non serve perchè c'è il pulsante <span class="nota">pull request</span>):	
 	</p>
 	<pre>git request-pull origin/master miofork</pre>
 	<p>L'output può essere inviato ai mantenitori: riporta da dove è stato creato il nuovo branch, un riassunto delle commit e da dove si possono scaricare.
@@ -166,17 +164,17 @@ Se per esempio si vuole aggiungere un'altra caratteristica al progetto, invece d
 	</p>
 	<pre>
 git checkout -b funzionalitaB origin/master
-(lavoro)
+<span class="nota"> (lavoro) </span>
 git commit
 git push miofork funzionalitaB
-(email al mantenitore)
+<span class="nota"> (email al mantenitore) </span>
 git fetch origin
 </pre>
 
 	<p>Ora ognuno dei propri lavori è separato come in una coda di modifiche che si possono riscrivere, ribasare e modificare senza che gli argomenti interferiscano o dipendano dagli altri.
 </p>
 
-ora c'è una parte con dei <span class="nota">rebase</span> .... e pertanto interrompo qui
+	<p>ora c'è una parte con dei <span class="nota">rebase</span> .... e pe il momento interrompo qui </p>
 
 </section>
 
@@ -190,9 +188,9 @@ Invece di fare un fork del progetto e di inviare le proprie modifiche con una pu
 	</p>
 	<pre>
 git checkout -b topicA
-  (work)
+<span class="nota"> (work)	</span>
 git commit
-  (work)
+<span class="nota"> (work) </span>	
 git commit
 </pre>
 	<p>
@@ -270,7 +268,7 @@ Emails will be sent from: Jessica Smith <jessica@example.com>
 Who should the emails be sent to? jessica@example.com
 Message-ID to be used as In-Reply-To for the first email? y					</span>
 	</pre>
-	<p>Per ciascuna patch che si sta per inviare, Git produce alcune informazioni di log</p>
+	<p>Per ciascuna patch che si sta per inviare, Git produce alcune informazioni di log.</p>
 	<p>A questo punto, bisogna andare nella <b>cartella bozze del proprio account</b>, inserire nel campo "A:" la mailing list alla quale si vuole inviare la patch, magari aggiungendo in copia il mantenitore del progetto o la persona responsabile per quella determinata sezione e mandare l'email.
 </p>
 </section>
@@ -327,7 +325,7 @@ error: ticgit.gemspec: patch does not apply		</span>
 	</p>
 
 	<h3>Applicare una patch con am</h3>
-	<p>Se il contributore è abbastanza bravo a usare il comando <span class="comando">format-patch</span> per generare la sua patch, allora il tuo lavoro sarà più facile perché la patch già contiene le informazioni sull'autore e un messaggio di commit. <br /> 
+	<p>Se il contributore è abbastanza bravo a usare il comando <span class="comando">format-patch</span> per generare la sua patch, allora il lavoro del mantenitore  sarà più facile perché la patch già contiene le informazioni sull'autore e un messaggio di commit. <br /> 
 Conviene incoraggiare i collaboratori ad utilizzare <span class="comando">format-patch</span> invece di <span class="comando">diff</span>. A quel punto basterà usare solo <span class="comando">git apply</span> per le patch precedenti e altre cose del genere.
 	</p>
 	<p>Per applicare una patch generata con <span class="comando">format-patch</span>, si userà <span class="comando">git am</span>. Tecnicamente <span class="comando">git am</span> è fatto per leggere un file <q>mbox</q>, che è un file piatto di puro testo per memorizzare uno o più messaggi email in un solo file. Assomiglia a questo:
@@ -342,7 +340,7 @@ Limit log functionality to the first 20	</span>
 </pre>
 	<p>Questo è l'inizio dell'output del comando <span class="comando">format-patch</span> che abbiamo visto nella sezione precedente, ma è anche un formato valido per <q>mbox</q> per le email. <br />
 Se qualcuno ha inviato la patch usando <span class="comando">git send-email</span> e l'abbiamo scaricata nel formato <q>mbox</q>, allora possiamo selezionare il file mbox in <span class="comando">git am</span> che inizierà ad applicare tutte le patch che troviamo. <br />
-Se si ha un client di posta elettronica che ci permette di salvare più messaggi in un file mbox allora possiamo salvare tutta una serie di patch in un singolo file e usare 'git am' per applicarle tutte assieme.
+Se si ha un client di posta elettronica che ci permette di salvare più messaggi in un file mbox allora possiamo salvare tutta una serie di patch in un singolo file e usare <span class="comando">git am</span> per applicarle tutte assieme.
 	</p>
 
 	<p>Se invece qualcuno ha caricato una patch generata con <span class="comando">format-patch</span> su un sistema di ticket e tracciamento, possiamo salvare localmente il file e passarlo a <span class="comando">git am</span> perché lo applichi:
@@ -368,11 +366,11 @@ CommitDate: Thu Apr 9 09:19:06 2009 -0700
 </pre>
 	<p><span class="nota">Commit</span> indica chi ha applicato la patch e <span class="nota">CommitDate</span> quando. <span class="nota">Author</span> chi ha creato la patch originariamente e quando.</p>
 
-	<p>Ma è possibile che la patch non sia applicabile correttamente. Il proprio branch principale potrebbe essere cambiato troppo rispetto al branch da cui deriva la patch o che la patch dipenda da altre che non hai ancora applicato. In questo caso il processo di <span class="comando">git am</span> fallirà e darà errore e  ci chiederà cosa si vuole fare. <br />
+	<p>Ma è possibile che la patch non sia applicabile correttamente. Il proprio branch principale potrebbe essere cambiato troppo rispetto al branch da cui deriva la patch o che la patch dipenda da altre che non abbiamo ancora applicato. In questo caso il processo di <span class="comando">git am</span> fallirà e darà errore e  ci chiederà cosa si vuole fare. <br />
 Inoltre questo comando aggiunge dei marcatori di conflitto in ciascun file che presenti un problema, similmente a quanto avviene nelle operazioni di <span class="comando">merge</span> o <span class="comando">rebase</span>. E allora bisognerà risolvere il problema allo stesso modo: modificare il file per risolvere il conflitto, metterlo nello stage ed eseguire <span class="comando">git am --resolved</span> per continuare con la patch successiva:
 	</p>
 	<pre>
-  (fix the file)
+<span class="nota"> (fix the file)	</span>
 git add ticgit.gemspec
 git am --resolved
 </pre>
@@ -380,14 +378,14 @@ git am --resolved
 	<p>Se si sta applicando una serie di patch da un file <q>mbox</q> si può eseguire il comando <span class="comando">git am</span> anche in modalità interattiva, che si ferma ogni volta che incontra una patch per chiederci se vogliamo applicarla:
 	</p>
 	<pre>git am -3 -i mbox</pre>
-	<p>Quando tutte la patch per l'orgomento sono state applicate e committate nel proprio branch, toccherà a noi decidere se e come integrarle in un branch principale.
+	<p>Quando tutte la patch per l'orgomento sono state applicate e committate nel proprio branch, toccherà a noi decidere se e come integrarle nel branch principale.
 	</p>
 
 </section>
 
 <section id="s8">
 	<h2>Scaricare branch remoti</h2>
-	<p>Se la contribuzione viene da un utente Git che ha un proprio repository su cui ha pubblicato una serie di modifiche e ti ha mandato l'indirizzo del repository e il nome del branch remoto in cui sono le stesse, si può aggiungerlo come remoto e unirle localmente.
+	<p>Se la contribuzione viene da un utente Git che ha un proprio repository su cui ha pubblicato una serie di modifiche e ci ha mandato l'indirizzo del repository e il nome del branch remoto in cui sono le stesse, si può aggiungerlo come remoto e unirle localmente.
 	</p>
 	<p>Se, per esempio, Jessica ci ha inviato un'email dicendoci che nel branch <span class="nota">ruby-client</span> del suo repository ha sviluppato un'interessante funzionalità, la possiamo testare aggiungendo il branch remoto e scaricarlo come uno localmente:
 	</p>
@@ -399,7 +397,7 @@ git checkout -b rubyclient jessica/ruby-client
 
 	<p>Se successivamente ci invia un'altra email con un altro branch che contenga un'altra funzionalità interessante la possiamo scaricare più velocemente perché abbiamo già configurato il repository remoto.
 	</p>
-	<p>Questa configurazione è molto utile se si lavori molto con una persona. In caso contrario, se qualcuno produce una sola patch di tanto in tanto può essere più rapido accettarle per email, invece di chiedere a tutti di avere un proprio server pubblico.
+	<p>Questa configurazione è molto utile se si lavora molto con una persona. In caso contrario, se qualcuno produce una sola patch di tanto in tanto può essere più rapido accettarle per email, invece di chiedere a tutti di avere un proprio server pubblico.
 	</p>
 	<p>Se non si lavora spesso con una persona ma si vuole comunque prendere le modifiche in questo modo si può sempre passare l'URL del repository remoto al comando <span class="comando">git pull</span>. Questo farà una pull una tantum senza salvare l'URL come un riferimento remoto:
 	</p>
@@ -433,7 +431,7 @@ Date:   Mon Oct 22 19:38:36 2008 -0700
 	<pre>git diff master</pre>
 	<p>Quello che si vuole realmente vedere sono le modifiche aggiunte nel branch: il lavoro che effettivamente otterremo se le unissimo al master. Possiamo ottenerlo facendo si che Git confronti l'ultima commit del branch col primo antenato comune con il branch master. 
 	</p>
-	<p>Tecnicamente lo possiamo farlo noi scoprendo l'antenato comune ed eseguendo quindi la <span class="comando">diff</span>:</p>
+	<p>Tecnicamente lo possiamo fare noi scoprendo l'antenato comune ed eseguendo quindi la <span class="comando">diff</span>:</p>
 	<pre>
 git merge-base contrib master
 <span class="nota">  36c7dba2c95e6bbb78dfa822519ecfec6e1ca649		</span>
