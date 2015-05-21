@@ -48,6 +48,12 @@
 		<optgroup label="Moduli">
 			<option value="s12">Lavorare coi moduli</option>
 		</optgroup>
+		<optgroup label="Comandi interni di Git">
+			<option value="s13">Gli oggetti di Git</option>
+			<option value="s14">L'albero degli oggetti</option>
+			
+			
+		</optgroup>
 	</select>
 
 
@@ -344,6 +350,116 @@ Dopodichè diamo il comando <span class="comando">git bisect run</span>	a cui pa
 
 </section>
 
+<section id="s13">
+	<h2>Gli oggetti di Git</h2>
+	<p>Git è un filesystem indirizzabile per contenuto. Significa che il nucleo di <span class="nota">Git è un semplice database chiave-valore</span>. E' possibile inserire qualsiasi tipo di contenuto al suo interno, e ci verrà restituita una chiave che potremo usare per recuperare quel contenuto in qualsiasi  momento.  
+	</p>
+	<p>Quando creiamo un file nel nostro progetto, Git lo salva nella directory <span class="nota">objects</span>. Dando un occhiata all'interno della directoty troveremo (dopo aver creato il file) una subdirectory di due caratteri che sono i primi due caratteri del checksum SHA-1 di 40 caratteri creato. Mentre il nome del file, all'interno della subdirectory è nominato con i restanti 38 caratteri dell'hash. <br />
+Utilizzando il comando <span class="comando">find</span> possiamo vedere cosa c'è nella directory <span class="nota">objects</span>:
+	</p>
+	<pre>
+find .git/objects -type f 
+<span class="nota">.git/objects/89/f9b55119edb1428671316e4add261110f0e2c2
+.git/objects/7c/29aad6afcdf28b1a4a68e33c0ba7e18a8b418f
+.git/objects/7c/142a4f74cbfe7eb366e4ba8057637d64e684d7
+.git/objects/2f/5a01588ac20a5c8f460aa6afb312f0881e09f2			</span>
+	</pre>	
+	<p>Vediamo che nella directory ci sono quattro file.</p>
+
+	<p>Git ci mette a disposizione il comando <span class="comando">cat-file</span> per estrarre il contenuto di ogni file:</p>
+	<pre>
+git cat-file -p 2f5a01588ac20a5c8f460aa6afb312f0881e09f2
+	</pre>
+
+	<p>La cosa eccezionale è che possiamo scambiare i contenuti dei file (o i nomi dei file) in questo modo:</p>
+	<pre>
+git cat-file -p 2f5a01588ac20a5c8f460aa6afb312f0881e09f2 > test.txt			
+	</pre>
+	<p>E' successo che il contenuto del file rappresentato dall'hash lo abbiamo passato al file <span class="nota">test.txt</span> che è uno degli altri tre file. <br />
+Infatti se vogliamo verificarlo possiamo utilizzare il comando <span class="comando">cat</span>:
+	</p>
+	<pre>cat test.txt</pre>	
+
+	<p>Sopra abbiamo utilizzato il comando <span class="comando">cat-file</span> con l'opzione <span class="comando">-p</span> per estrarre, nel nostro terminale, il contenuto del file. Se invece vogliamo ottenere soltanto il tipo del file (oggetto) dovremo utilizzare l'opzione <span class="comando">-t</span>. Il risultato restituito sarà <span class="nota">blob</span> mentre in caso di directory avremo <span class="nota">tree</span>. 
+	</p>
+</section>
+
+<section id="s14">
+	<h2>L'albero degli oggetti</h2>
+	<p>
+ Git salva il contenuto in modo simile ad un filesystem UNIX, ma un pò più semplificato. Tutto il suo contenuto è salvato come <span class="nota">albero</span> o <span class="nota">blob</span>, dove gli alberi corrispondono alle directory UNIX e i blob corrispondono più o meno agli inode o ai contenuti dei file. Un singolo albero contiene una o più voci, ognuna delle quali contiene un puntatore SHA-1 a un blob o a un altro con i suoi modi, tipi e nomi. <br />
+Ad esempio, l'albero più recente nel progetto <span class="nota">GitTutorial</span> potrebbe assomigliare a questo:
+	</p>
+	<pre>
+git cat-file -p master^{tree}
+<span class="nota">100644 blob ebe07361a71e3cf493078458a9da4a95c485c7e9	.gitignore
+040000 tree b34d10f264f22463baca0b98beec54c9ace33758	CSS
+040000 tree 60c83d7856dc0c391290ddf91cc81b004443e3dd	JS
+100644 blob 52f423ae02832c6f63020bea3dab288e3ec2fa34	Master.html
+100644 blob 2c5e9de4088bc99660acef12a07b7dad555800a3	README.md
+100644 blob 76ba27b93081b159241568322e4ff87c31954f23	git1.html
+100644 blob 17c1caadeb9b31c0787d119c323264e8c81f5863	git2.html
+100644 blob 845985d97f79d4f8c209e4a8b8ad077ef8a2e77b	git3.html
+100644 blob 88df7a06ff9e2e9d29eda43f689a16f5ab134c89	git4.html
+100644 blob 6bf591c7e3fb5e85b4e925bf1ed1901caf18034d	git5.html		</span>
+</pre>
+	<p>La sintassi <span class="comando">master^{tree}</span> indica che l'ultima commit sul branch <span class="nota">master</span> punta a questo albero. <br />
+Dall'output notiamo che ci sono diversi oggetti <span class="nota">blob</span> (file) e due oggetti <span class="nota">tree</span> che sono dei puntatori a altri alberi. 
+Se proviamo a vedere cosa c'è nell'albero <q>JS</q> avremo:
+	</p>
+	<pre>git cat-file -p 60c83d7856d
+040000 tree d67d437e64c2afea7644e773ed01a21dbe036fa6	min
+100644 blob bbc0d8f41d83baca59ab447234237a75183526eb	scorrimentoPagina2.js
+</pre>
+
+	<p>
+Possiamo notare dall'output che nell'albero <q>JS</q> c'è un file (<q>scorrimentoPagina2.js</q>) e un'altra directory (albero) <q>min</q> rappresentati entrambi da checksum SHA-1. <br />
+	</p>
+
+	<h3>Ricerca di un file in un preciso momento</h3>
+	<p>Può capitare di voler visualizzare un file prima che subisse delle modifiche in un preciso momento della sua storia. <br />
+Possiamo agire in questo modo; per prima cosa diamo il comando <span class="comando">git log --pretty=oneline</span> che ci mostrerà gli hash delle commit con la rispettiva descrizione. In base a tale descrizione possiamo capire quando il nostro file ha subito delle modiche:   
+	</p>
+	<pre>
+<span class="nota">88c20c502154126883714b2babd3c8d803a6469c Modificato "git1": semplici correzioni
+4ef3ce6daf2cacb7523540cba50ea3a8ea31a345 Mod "git2": aggiunta sezione 's28A' (Eliminare le etichette)
+e58d42a74e2c1ffaee19f34fab61411976bbccbb Modificato 'git5' Eseguite revisione e correzioni varie
+840e023ca601f11b1fbd71cafcab10264638f6b1 Modificato 'git4' Eseguite revisione e correzioni varie
+.......
+f58ce734c486edb3c2c1f275e70faf111571f8c1 Aggiunta del file "README.md"
+212c6d77bc213d6d9e9c29ccc98f88fee1b1160b Corretto errore di un collegamento alla  sezione 23
+fab038f4285d5ca4c7ff0ac4e286ac3232a4ce48 Versione iniziale di Git Tutorial				</span>
+	</pre>
+	<p>Poniamo il caso di voler visualizzare e analizzare il nostro file alla prima commit cioè nella <span class="nota">Versione iniziale di Git Tutorial</span>. <br />
+Quindi eseguiamo <span class="comando">cat-file</span> seguito dall'hash della commit: 
+	</p>
+	<pre>git cat-file -p fab038f42</pre>
+	<p>l'output sarà</p>	
+	<pre>
+<span class="nota">tree ce3f841d62f29e31a143480523cd7d9d5ff7428a
+author MikePap &lt;mymail@gmail.com&gt; 1430412849 +0200
+committer MikePap &lt;mymail@gmail.com&gt; 1430412849 +0200
+
+Versione iniziale di Git Tutorial				</span>
+</pre>
+	<p>l'hash rispettivo al <q>tree</q> (<span class="nota">ce3f841d62 ...</span>) è quello che ci interessa perchè fa riferimento all'abero che contiene quello che stiamo cercando. Quindi ridiamo <span class="comando">cat-file</span> di quell'hash: 
+	</p>
+	<pre> git cat-file -p ce3f841d62</pre>
+	<p>che ci restituisce il seguente output: </p>
+	<pre>
+<span class="nota">040000 tree b01852ca5e707524979ecfcc3bfe544a39c6d646	CSS
+040000 tree 60c83d7856dc0c391290ddf91cc81b004443e3dd	JS
+100644 blob 073080a9cdffe632b3cdafb6da5f46f98fca01fe	Master.html
+100644 blob fbc1b4a7790c77e4227c924953f8ea852ae518ec	git1.html
+100644 blob 1ecd23d09ad503bcfca4c4d640f880e9f085fb9a	git2.html
+100644 blob b2c17ceaf0a0bf5595f1fb1a540cb08408288cd6	git3.html		</span>
+</pre>
+	<p>da cui si nota che alla prima commit erano presenti soltanto tre file, nella directory principale, e due subdirectory. Ora ipotizzando di voler vedere come si presentava il file <q>git3.html</q> in quel momento non dobbiamo far altro che ridare di nuovo <span class="comando">cat-file</span> del suo rispettivo hash:
+	</p>
+	<pre>git cat-file -p b2c17ceaf0</pre>
+	<p>il file <q>git3.html</q> ci sarà mostrato nel terminale com'era in quel preciso momento. </p>
+</section>
+
 
 <section>
 </section>
@@ -370,7 +486,6 @@ obj.clickScroll();
 //bloccaPropagazione();	
 
 </script>
-
 
 
 
