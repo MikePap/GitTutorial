@@ -976,6 +976,10 @@ select.addEventListener("change", function(){
 	window.pageYOffset = of;
 	document.documentElement.scrollTop = of;
 	document.body.scrollTop = of;
+//	Togliere il focus dalla <select> e assegnarlo al documento 
+	window.focus();
+	document.documentElement.focus();
+	document.body.focus();
 },false);
 
 // Per lo scorrimento del documento, verso l'alto
