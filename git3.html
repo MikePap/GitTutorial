@@ -432,13 +432,16 @@ git merge ramo2
 
 <script type="text/javascript" src="JS/min/scorrimentoPagina2.js"></script>
 <script type="text/javascript">
-
-var sezioni = document.querySelector(".sezioni");
-sezioni.addEventListener("change", function (){
-	var valSez = this.value;
+// Scorrimento verso la sezione cliccata
+var select = document.querySelector('select.sezioni');
+select.addEventListener("change", function(){ 
+	var valSez = this.value;									// s3
 	var pattern = "#" + valSez;
-		document.location.href = pattern;
-}, false);
+	var of = document.querySelector(pattern).offsetTop;
+	window.pageYOffset = of;
+	document.documentElement.scrollTop = of;
+	document.body.scrollTop = of;
+},false);
 
 // Per lo scorrimento del documento, verso l'alto
 var obj = new ScrollPage('1000', 100, 'freccia_sali', 300);
