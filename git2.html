@@ -766,9 +766,6 @@ Se abbiamo clonato il proprio repository, si dovrebbe vedere almeno <span class=
 <span class="nota">origin	https://github.com/MikePap/KaiPai.git (fetch)
 origin	https://github.com/MikePap/KaiPai.git (push) </span>
 </pre>
-	<p>Si possono avere più di un server remoto e nel caso verranno elencati. <br />
-NOTA BENE: soltanto <span class="nota">origin</span> è un URL SSH, e quindi è l'unico dove si può inviare il proprio lavoro con <span class="comando">push</span>.
-	</p>
 </section>
 
 <section id="s21">
@@ -793,6 +790,30 @@ git remote add origin https://github.com/MikePap/GitTutorial.git
 git push -u origin master
 </pre>
 	<p>Ora tutti i file del repository in locale sono stati trasferiti nel repository <span class="nota">GitTutorial</span> ospitato su <q>GitHub</q>.</p>
+
+
+	<p>Si possono avere più di un server remoto e nel caso verranno elencati. <br />
+	</p>
+	<p>
+NOTA BENE: soltanto <span class="nota">origin</span> è un URL SSH, e quindi è l'unico dove si può inviare il proprio lavoro con <span class="comando">push</span>. <br />
+Però se si vuole aggiungere lo stesso progetto su due server differenti allora bisogna cambiare <span class="nota">origin</span>. Cioè se abbiamo aggiunto il primo server con:
+	</p>
+	<pre>
+git remote add origin https://github.com/MikePap/GitTutorial.git
+</pre>
+	<p>ora <span class="nota">origin</span> è già stato assegnato al server <q>GitHub</q> per cui se andiamo ad aggiungere lo stesso progetto su un altro server dobbiamo cambiare <span class="nota">origin</span> in un altro nome:
+	</p>
+	<pre>
+git remote add origin2  https://gitlab.com/MikePap/GitTutorial.git
+</pre>
+	<p>
+In questo modo abbiamo aggiunto il progetto anche al server <q>GitLab</q>	cambiando però <span class="nota">origin</span> in <span class="nota">origin2</span>. Fatto ciò quando andremo a dare il <span class="comando">push</span> per aggiornare entrambi i server dovremo dare:
+	</p>
+	<pre>
+git push origin master			<span class="nota">aggiornerà ul server GitHub</span>
+git push origin2 master			<span class="nota">aggiornerà il server GitLab</span>
+</pre>
+
 </section>
 
 <section id="s23">
