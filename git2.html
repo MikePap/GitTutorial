@@ -73,7 +73,7 @@
 			<option value="s27">Etichette</option>
 			<option value="s28">Elencare l'etichette</option>
 			<option value="s28A">Eliminare le etichette</option>
-			<option value="s29">Vedere la commit associata al tag</option>
+			<option value="s29">Vedere le commit associate al tag</option>
 			<option value="s30">Etichette firmate</option>
 			<option value="s31">Etichettare in un secondo momento</option>
 			<option value="s32">Condividere le etichette</option>
@@ -937,9 +937,27 @@ ecc..
 </section>
 
 <section id="s29">
-	<h2>Vedere la commit associata al tag</h2>
-	<p>Il comando <span class="comando">git show &lt;tag&gt;</span> restituisce alcune informazioni sulla commit associata al tag definito come opzione:</p>
-	<pre>git show v1.4</pre>
+	<h2>Vedere le commit associate al tag</h2>
+
+	<p>Utilizzando il comando <span class="comando">log</span> possiamo vedere quale commit è associata ad un tale <span class="nota">tag</span>. Attenzione però che se passiamo soltanto il none del tag Git ci restituirà tutte le commit fino quella indicata come parametro:
+	</p>
+	<pre>
+git log V.2
+</pre>
+	<p>
+il risultato ci mostra che la prima commit è quella del tag <q>V.2</q>; pertanto se vogliamo ottenere soltanto la commit di tale tag dovremo passare il parametro <span class="comando">-n</span>
+	</p>
+	<pre>
+git log tag V.2  -1
+</pre>
+	<p>Ora il risultato mostrato sarà soltanto quello relativo al tag V.2.  <br />
+Come visto sopra il comando <span class="comando">git log</span> ci restituisce soltanto delle informazioni che riguardano l'hash, il messaggio nome di autore e data della commit; ciò non ci vieta il fatto di passare anche il parametro <span class="comando">-p</span> per vedere tutto quello che si è fatto in quel tag. 
+	</p>
+	<pre>
+git log -p tag V.2 -1
+</pre>
+	<p>e allo stesso modo possiamo utilizzare il comando <span class="comando">git show &lt;tag&gt;</span> </p>
+	<pre>git show V.2</pre>
 
 </section>
 
